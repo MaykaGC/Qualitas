@@ -1,8 +1,7 @@
 package org.example.Entity;
-
 import jakarta.persistence.*;
-
 import java.util.Date;
+
 
 @Entity
 @Table(name = "ALUMNO")

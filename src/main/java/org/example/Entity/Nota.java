@@ -1,7 +1,6 @@
 package org.example.Entity;
-
-
 import jakarta.persistence.*;
+
 
 @Entity
 @Table(name="NOTA")

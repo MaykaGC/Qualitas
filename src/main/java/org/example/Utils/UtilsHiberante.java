@@ -5,24 +5,23 @@ import org.hibernate.cfg.Configuration;
 
 public class UtilsHiberante {
 
-//con esta clase iniciamos sesion para trabajar con la base de datos
-
+    //con esta clase iniciamos una sesión para establecer conexión con la BD
     private static final SessionFactory sessionFactory = buildSessionFactory();
 
     private static SessionFactory buildSessionFactory() {
-        try{
+        try {
             return new Configuration().configure("hibernate.cfg.xml").buildSessionFactory();
-        }catch (Throwable e){
+        } catch (Throwable e) {
             System.out.println("Initial SessionFactory creation failed" + e);
             throw new ExceptionInInitializerError(e);
         }
     }
 
-    public static SessionFactory getSessionFactory(){
-        return  sessionFactory;
+    public static SessionFactory getSessionFactory() {
+        return sessionFactory;
     }
 
-    public static void shutdown(){
+    public static void shutdown() {
         getSessionFactory().close();
     }
 }
