@@ -3,9 +3,9 @@ package org.example.Utils;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
 
-public class UtilsHiberante {
+public class UtilsHibernate {
 
-    //con esta clase iniciamos una sesión para establecer conexión con la BD
+    //con esta clase iniciamos una sesión para establecer conexión con la BBDD
     private static final SessionFactory sessionFactory = buildSessionFactory();
 
     private static SessionFactory buildSessionFactory() {
