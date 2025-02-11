@@ -26,12 +26,10 @@ public class Alumno {
     @Column(name = "Telefono_Alumno")
     private String telefono_Alumno;
 
-
     //Clave foránea
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "TutorLegal", referencedColumnName = "DNI_Tutor", nullable = false)
     private Tutor tutor;
-
 
     //GETTERS
     public String getDni_Alumno() {
@@ -61,7 +59,6 @@ public class Alumno {
     public Tutor getTutor() {
         return tutor;
     }
-
 
     //SETTERS
     public void setDni_Alumno(String dni_Alumno) {
