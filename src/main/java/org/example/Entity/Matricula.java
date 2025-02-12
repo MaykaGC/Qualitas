@@ -3,25 +3,25 @@ import jakarta.persistence.*;
 
 
 @Entity
-@Table(name="NOTA")
-public class Nota {
+@Table(name="Matricula")
+public class Matricula {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name="IdNota")
+    @Column(name="idMatricula")
     private int idNota;
 
     @Column(name="Nota")
     private int nota;
 
     //Clave foránea 1
-    @ManyToOne(fetch =FetchType.LAZY) //con estA líneas mejoramos el rendimiento a la hora de realizar consultas
-    @JoinColumn(name="Alumno", referencedColumnName = "DNI_Alumno", nullable = false)
+    @ManyToOne(fetch = FetchType.LAZY) //Con esta líneas mejoramos el rendimiento a la hora de realizar consultas
+    @JoinColumn(name="idAlumno", referencedColumnName = "DNI_Alumno", nullable = false)
     private Alumno alumno;
 
     //Clave foránea 2
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="Asignatura", referencedColumnName = "IdAsignatura", nullable = false)
+    @JoinColumn(name="idAsignatura", referencedColumnName = "IdAsignatura", nullable = false)
     private Asignatura asignatura;
 
 

@@ -5,7 +5,7 @@ import java.util.Date;
 
 
 @Entity
-@Table(name = "PROFESOR")
+@Table(name = "Profesor")
 public class Profesor {
 
     @Id

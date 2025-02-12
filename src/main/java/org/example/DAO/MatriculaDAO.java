@@ -7,9 +7,9 @@ import org.example.Utils.*;
 
 import java.util.List;
 
-public class NotaDAO {
+public class MatriculaDAO {
     // Métod0 para añadir una nota a la base de datos
-    public void addMark(Nota nota) {
+    public void addMark(Matricula nota) {
         Transaction transaction = null;
         try (Session session = UtilsHibernate.getSessionFactory().openSession()) {
             transaction = session.beginTransaction();
@@ -24,9 +24,9 @@ public class NotaDAO {
     }
 
     // Métod0 para obtener todas las notas de un alumno
-    public List<Nota> getMarksByDniAlumno(Alumno alumno) {
+    public List<Matricula> getMarksByDniAlumno(Alumno alumno) {
         try (Session session = UtilsHibernate.getSessionFactory().openSession()) {
-            return session.createQuery("FROM Nota WHERE alumno.dni_Alumno = :dniAlumno", Nota.class)
+            return session.createQuery("FROM Matricula WHERE alumno.dni_Alumno = :dniAlumno", Matricula.class)
                     .setParameter("dniAlumno", alumno.getDni_Alumno())
                     .getResultList();
         } catch (Exception e) {

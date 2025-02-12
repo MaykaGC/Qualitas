@@ -4,7 +4,7 @@ import java.util.Date;
 
 
 @Entity
-@Table(name = "ALUMNO")
+@Table(name = "Alumno")
 public class Alumno {
 
     @Id
@@ -30,6 +30,21 @@ public class Alumno {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "TutorLegal", referencedColumnName = "DNI_Tutor", nullable = false)
     private Tutor tutor;
+
+
+    public Alumno(String dni_Alumno, String nombre_Alumno, String email_Alumno, Date fechaNacimiento_Alumno, String direccion_Alumno, String telefono_Alumno, Tutor tutor) {
+        this.dni_Alumno = dni_Alumno;
+        this.nombre_Alumno = nombre_Alumno;
+        this.email_Alumno = email_Alumno;
+        this.fechaNacimiento_Alumno = fechaNacimiento_Alumno;
+        this.direccion_Alumno = direccion_Alumno;
+        this.telefono_Alumno = telefono_Alumno;
+        this.tutor = tutor;
+    }
+
+    public Alumno() {
+
+    }
 
     //GETTERS
     public String getDni_Alumno() {
