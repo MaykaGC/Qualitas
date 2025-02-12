@@ -1,72 +1,78 @@
 package org.example.Entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
-import java.util.Date;
+import jakarta.persistence.*;
 
 @Entity
 @Table(name = "Tutor")
 public class Tutor {
 
     @Id
-    @Column(name = "TUTOR")
-    private String dni_Tutor;
+    @Column(name = "DNI_Tutor")
+    private String dniTutor;
 
     @Column(name = "Nombre_Tutor")
-    private String nombre_Tutor;
-
-    @Column(name = "FechaNacimiento_Tutor")
-    private Date fechaNacimiento_Tutor;
+    private String nombreTutor;
 
     @Column(name = "Telefono_Tutor")
-    private String telefono_Tutor;
+    private String telefonoTutor;
 
     @Column(name = "Direccion_Tutor")
-    private String direccion_Tutor;
+    private String direccionTutor;
 
+    @OneToOne
+    @JoinColumn(name = "DNI_Tutor", referencedColumnName = "DNI")
+    private Usuario usuario;
 
-    //GETTERS
-    public String getDni_Tutor() {
-        return dni_Tutor;
+    public Tutor() {
     }
 
-    public String getNombre_Tutor() {
-        return nombre_Tutor;
+    public Tutor(String dniTutor, String nombreTutor, String telefonoTutor, String direccionTutor, Usuario usuario) {
+        this.dniTutor = dniTutor;
+        this.nombreTutor = nombreTutor;
+        this.telefonoTutor = telefonoTutor;
+        this.direccionTutor = direccionTutor;
+        this.usuario = usuario;
     }
 
-    public Date getFechaNacimiento_Tutor() {
-        return fechaNacimiento_Tutor;
+    // Getters and Setters
+
+    public String getDniTutor() {
+        return dniTutor;
     }
 
-    public String getTelefono_Tutor() {
-        return telefono_Tutor;
+    public void setDniTutor(String dniTutor) {
+        this.dniTutor = dniTutor;
     }
 
-    public String getDireccion_Tutor() {
-        return direccion_Tutor;
+    public String getNombreTutor() {
+        return nombreTutor;
     }
 
-
-    //SETTERS
-    public void setDni_Tutor(String dni_Tutor) {
-        this.dni_Tutor = dni_Tutor;
+    public void setNombreTutor(String nombreTutor) {
+        this.nombreTutor = nombreTutor;
     }
 
-    public void setNombre_Tutor(String nombre_Tutor) {
-        this.nombre_Tutor = nombre_Tutor;
+    public String getTelefonoTutor() {
+        return telefonoTutor;
     }
 
-    public void setFechaNacimiento_Tutor(Date fechaNacimiento_Tutor) {
-        this.fechaNacimiento_Tutor = fechaNacimiento_Tutor;
+    public void setTelefonoTutor(String telefonoTutor) {
+        this.telefonoTutor = telefonoTutor;
     }
 
-    public void setTelefono_Tutor(String telefono_Tutor) {
-        this.telefono_Tutor = telefono_Tutor;
+    public String getDireccionTutor() {
+        return direccionTutor;
     }
 
-    public void setDireccion_Tutor(String direccion_Tutor) {
-        this.direccion_Tutor = direccion_Tutor;
+    public void setDireccionTutor(String direccionTutor) {
+        this.direccionTutor = direccionTutor;
+    }
+
+    public Usuario getUsuario() {
+        return usuario;
+    }
+
+    public void setUsuario(Usuario usuario) {
+        this.usuario = usuario;
     }
 }

@@ -5,11 +5,17 @@ import org.example.Utils.UtilsHibernate;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
-import java.util.List;
-
 public class TutorDAO {
-    // Métod0 para añadir un tutor a la base de datos
-    public void addTutor(Tutor tutor) {
+
+    // Métod0 para obtener un tutor por su DNI
+    public Tutor obtenerTutorPorDni(Tutor tutor) {
+        try (Session session = UtilsHibernate.getSessionFactory().openSession()) {
+            return session.get(Tutor.class, tutor.getDniTutor());
+        }
+    }
+
+    // Métod0 para crear un nuevo tutor
+    public void crearTutor(Tutor tutor) {
         Transaction transaction = null;
         try (Session session = UtilsHibernate.getSessionFactory().openSession()) {
             transaction = session.beginTransaction();
@@ -23,22 +29,35 @@ public class TutorDAO {
         }
     }
 
-    // Métod0 para obtener todos los tutores
-    public List<Tutor> getTutors() {
+    // Métod0 para actualizar los datos de un tutor
+    public void actualizarTutor(Tutor tutor) {
+        Transaction transaction = null;
         try (Session session = UtilsHibernate.getSessionFactory().openSession()) {
-            return session.createQuery("FROM Tutor", Tutor.class).getResultList();
+            transaction = session.beginTransaction();
+            session.update(tutor);
+            transaction.commit();
         } catch (Exception e) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
             throw new RuntimeException(e);
         }
     }
 
-    // Métod0 para obtener un tutor por su dni
-    public Tutor getTutorByDni(String dni) {
+    // Métod0 para eliminar un tutor
+    public void eliminarTutor(Tutor tutor) {
+        Transaction transaction = null;
         try (Session session = UtilsHibernate.getSessionFactory().openSession()) {
-            return session.createQuery("FROM Tutor WHERE dni_Tutor = :dni", Tutor.class)
-                    .setParameter("dni", dni)
-                    .getSingleResult();
+            transaction = session.beginTransaction();
+            Tutor tutorToDelete = session.get(Tutor.class, tutor.getDniTutor());
+            if (tutorToDelete != null) {
+                session.delete(tutorToDelete);
+            }
+            transaction.commit();
         } catch (Exception e) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
             throw new RuntimeException(e);
         }
     }

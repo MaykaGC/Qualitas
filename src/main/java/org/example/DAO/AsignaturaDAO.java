@@ -5,11 +5,26 @@ import org.example.Utils.UtilsHibernate;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
-import java.util.List;
-
 public class AsignaturaDAO {
-    // Métod0 para añadir una asignatura a la base de datos
-    public void addSubject(Asignatura asignatura) {
+
+    // Métod0 para obtener una asignatura por su ID
+    public Asignatura obtenerAsignaturaPorId(Asignatura asignatura) {
+        try (Session session = UtilsHibernate.getSessionFactory().openSession()) {
+            return session.get(Asignatura.class, asignatura.getIdAsignatura());
+        }
+    }
+
+    // Métod0 para obtener una asignatura por el nombre
+//    public Asignatura obtenerAsignaturaPorNombre(Asignatura asignatura) {
+//        try (Session session = UtilsHibernate.getSessionFactory().openSession()) {
+//            return session.createQuery("FROM Asignatura WHERE Nombre_Asignatura = :nombre", Asignatura.class)
+//                    .setParameter("nombre", asignatura.getNombreAsignatura())
+//                    .uniqueResult();
+//        }
+//    }
+
+    // Métod0 para crear una nueva asignatura
+    public void crearAsignatura(Asignatura asignatura) {
         Transaction transaction = null;
         try (Session session = UtilsHibernate.getSessionFactory().openSession()) {
             transaction = session.beginTransaction();
@@ -23,22 +38,35 @@ public class AsignaturaDAO {
         }
     }
 
-    // Métod0 para obtener todas las asignaturas
-    public List<Asignatura> getSubjects() {
+    // Métod0 para actualizar los datos de una asignatura
+    public void actualizarAsignatura(Asignatura asignatura) {
+        Transaction transaction = null;
         try (Session session = UtilsHibernate.getSessionFactory().openSession()) {
-            return session.createQuery("FROM Asignatura", Asignatura.class).getResultList();
+            transaction = session.beginTransaction();
+            session.update(asignatura);
+            transaction.commit();
         } catch (Exception e) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
             throw new RuntimeException(e);
         }
     }
 
-    // Métod0 para obtener una asignatura por su id
-    public Asignatura getSubjectById(Asignatura asignatura) {
+    // Métod0 para eliminar una asignatura
+    public void eliminarAsignatura(Asignatura asignatura) {
+        Transaction transaction = null;
         try (Session session = UtilsHibernate.getSessionFactory().openSession()) {
-            return session.createQuery("FROM Asignatura WHERE idAsignatura = :id", Asignatura.class)
-                    .setParameter("id", asignatura.getIdAsignatura())
-                    .getSingleResult();
+            transaction = session.beginTransaction();
+            Asignatura asignaturaToDelete = session.get(Asignatura.class, asignatura.getIdAsignatura());
+            if (asignaturaToDelete != null) {
+                session.delete(asignaturaToDelete);
+            }
+            transaction.commit();
         } catch (Exception e) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
             throw new RuntimeException(e);
         }
     }

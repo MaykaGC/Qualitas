@@ -1,7 +1,8 @@
 package org.example.Entity;
+
 import jakarta.persistence.*;
 import java.util.Date;
-
+import java.util.List;
 
 @Entity
 @Table(name = "Alumno")
@@ -9,98 +10,119 @@ public class Alumno {
 
     @Id
     @Column(name = "DNI_Alumno")
-    private String dni_Alumno;
+    private String dniAlumno;
 
     @Column(name = "Nombre_Alumno")
-    private String nombre_Alumno;
+    private String nombreAlumno;
 
     @Column(name = "Email_Alumno")
-    private String email_Alumno;
+    private String emailAlumno;
 
     @Column(name = "FechaNacimiento_Alumno")
-    private Date fechaNacimiento_Alumno;
+    private Date fechaNacimientoAlumno;
 
     @Column(name = "Direccion_Alumno")
-    private String direccion_Alumno;
+    private String direccionAlumno;
 
     @Column(name = "Telefono_Alumno")
-    private String telefono_Alumno;
+    private String telefonoAlumno;
 
-    //Clave foránea
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "TutorLegal", referencedColumnName = "DNI_Tutor", nullable = false)
+    @JoinColumn(name = "TutorLegal", referencedColumnName = "DNI_Tutor")
     private Tutor tutor;
 
+    @OneToOne
+    @JoinColumn(name = "DNI_Alumno", referencedColumnName = "DNI")
+    private Usuario usuario;
 
-    public Alumno(String dni_Alumno, String nombre_Alumno, String email_Alumno, Date fechaNacimiento_Alumno, String direccion_Alumno, String telefono_Alumno, Tutor tutor) {
-        this.dni_Alumno = dni_Alumno;
-        this.nombre_Alumno = nombre_Alumno;
-        this.email_Alumno = email_Alumno;
-        this.fechaNacimiento_Alumno = fechaNacimiento_Alumno;
-        this.direccion_Alumno = direccion_Alumno;
-        this.telefono_Alumno = telefono_Alumno;
+    // Relación con la tabla Matricula
+    @OneToMany(mappedBy = "alumno", fetch = FetchType.LAZY)
+    private List<Matricula> matriculas;
+
+    public Alumno() {}
+
+    public Alumno(String dniAlumno, String nombreAlumno, String emailAlumno, Date fechaNacimientoAlumno, String direccionAlumno, String telefonoAlumno, Tutor tutor, Usuario usuario) {
+        this.dniAlumno = dniAlumno;
+        this.nombreAlumno = nombreAlumno;
+        this.emailAlumno = emailAlumno;
+        this.fechaNacimientoAlumno = fechaNacimientoAlumno;
+        this.direccionAlumno = direccionAlumno;
+        this.telefonoAlumno = telefonoAlumno;
         this.tutor = tutor;
+        this.usuario = usuario;
     }
 
-    public Alumno() {
+    // Getters y Setters
 
+    public String getDniAlumno() {
+        return dniAlumno;
     }
 
-    //GETTERS
-    public String getDni_Alumno() {
-        return dni_Alumno;
+    public void setDniAlumno(String dniAlumno) {
+        this.dniAlumno = dniAlumno;
     }
 
-    public String getEmail_Alumno() {
-        return email_Alumno;
+    public String getNombreAlumno() {
+        return nombreAlumno;
     }
 
-    public String getNombre_Alumno() {
-        return nombre_Alumno;
+    public void setNombreAlumno(String nombreAlumno) {
+        this.nombreAlumno = nombreAlumno;
     }
 
-    public Date getFechaNacimiento_Alumno() {
-        return fechaNacimiento_Alumno;
+    public String getEmailAlumno() {
+        return emailAlumno;
     }
 
-    public String getTelefono_Alumno() {
-        return telefono_Alumno;
+    public void setEmailAlumno(String emailAlumno) {
+        this.emailAlumno = emailAlumno;
     }
 
-    public String getDireccion_Alumno() {
-        return direccion_Alumno;
+    public Date getFechaNacimientoAlumno() {
+        return fechaNacimientoAlumno;
+    }
+
+    public void setFechaNacimientoAlumno(Date fechaNacimientoAlumno) {
+        this.fechaNacimientoAlumno = fechaNacimientoAlumno;
+    }
+
+    public String getDireccionAlumno() {
+        return direccionAlumno;
+    }
+
+    public void setDireccionAlumno(String direccionAlumno) {
+        this.direccionAlumno = direccionAlumno;
+    }
+
+    public String getTelefonoAlumno() {
+        return telefonoAlumno;
+    }
+
+    public void setTelefonoAlumno(String telefonoAlumno) {
+        this.telefonoAlumno = telefonoAlumno;
     }
 
     public Tutor getTutor() {
         return tutor;
     }
 
-    //SETTERS
-    public void setDni_Alumno(String dni_Alumno) {
-        this.dni_Alumno = dni_Alumno;
-    }
-
-    public void setNombre_Alumno(String nombre_Alumno) {
-        this.nombre_Alumno = nombre_Alumno;
-    }
-
-    public void setEmail_Alumno(String email_Alumno) {
-        this.email_Alumno = email_Alumno;
-    }
-
-    public void setFechaNacimiento_Alumno(Date fechaNacimiento_Alumno) {
-        this.fechaNacimiento_Alumno = fechaNacimiento_Alumno;
-    }
-
-    public void setDireccion_Alumno(String direccion_Alumno) {
-        this.direccion_Alumno = direccion_Alumno;
-    }
-
-    public void setTelefono_Alumno(String telefono_Alumno) {
-        this.telefono_Alumno = telefono_Alumno;
-    }
-
     public void setTutor(Tutor tutor) {
         this.tutor = tutor;
+    }
+
+    public Usuario getUsuario() {
+        return usuario;
+    }
+
+    public void setUsuario(Usuario usuario) {
+        this.usuario = usuario;
+    }
+
+    public List<Matricula> getMatriculas() {
+        return matriculas;
+    }
+
+    public void setMatriculas(List<Matricula> matriculas) {
+        this.matriculas = matriculas;
     }
 }

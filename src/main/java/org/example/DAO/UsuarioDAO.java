@@ -1,25 +1,25 @@
 package org.example.DAO;
 
-import org.example.Entity.Matricula;
+import org.example.Entity.Usuario;
 import org.example.Utils.UtilsHibernate;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
-public class MatriculaDAO {
+public class UsuarioDAO {
 
-    // Métod0 para obtener una matrícula por su ID
-    public Matricula obtenerMatriculaPorId(Matricula matricula) {
+    // Métod0 para obtener un usuario por su DNI
+    public Usuario obtenerUsuarioPorDni(String dni) {
         try (Session session = UtilsHibernate.getSessionFactory().openSession()) {
-            return session.get(Matricula.class, matricula.getIdMatricula());
+            return session.get(Usuario.class, dni);
         }
     }
 
-    // Métod0 para crear una nueva matrícula
-    public void crearMatricula(Matricula matricula) {
+    // Métod0 para crear un nuevo usuario
+    public void crearUsuario(Usuario usuario) {
         Transaction transaction = null;
         try (Session session = UtilsHibernate.getSessionFactory().openSession()) {
             transaction = session.beginTransaction();
-            session.persist(matricula);
+            session.persist(usuario);
             transaction.commit();
         } catch (Exception e) {
             if (transaction != null) {
@@ -29,12 +29,12 @@ public class MatriculaDAO {
         }
     }
 
-    // Métod0 para actualizar los datos de una matrícula
-    public void actualizarMatricula(Matricula matricula) {
+    // Métod0 para actualizar los datos de un usuario
+    public void actualizarUsuario(Usuario usuario) {
         Transaction transaction = null;
         try (Session session = UtilsHibernate.getSessionFactory().openSession()) {
             transaction = session.beginTransaction();
-            session.update(matricula);
+            session.update(usuario);
             transaction.commit();
         } catch (Exception e) {
             if (transaction != null) {
@@ -44,14 +44,14 @@ public class MatriculaDAO {
         }
     }
 
-    // Métod0 para eliminar una matrícula
-    public void eliminarMatricula(Matricula matricula) {
+    // Métod0 para eliminar un usuario
+    public void eliminarUsuario(String dni) {
         Transaction transaction = null;
         try (Session session = UtilsHibernate.getSessionFactory().openSession()) {
             transaction = session.beginTransaction();
-            Matricula matriculaToDelete = session.get(Matricula.class, matricula.getIdMatricula());
-            if (matriculaToDelete != null) {
-                session.delete(matriculaToDelete);
+            Usuario usuario = session.get(Usuario.class, dni);
+            if (usuario != null) {
+                session.delete(usuario);
             }
             transaction.commit();
         } catch (Exception e) {

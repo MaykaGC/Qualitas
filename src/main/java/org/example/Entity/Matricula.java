@@ -1,63 +1,68 @@
 package org.example.Entity;
+
 import jakarta.persistence.*;
 
-
 @Entity
-@Table(name="Matricula")
+@Table(name = "Matricula")
 public class Matricula {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name="idMatricula")
-    private int idNota;
+    @Column(name = "IdMatricula")
+    private int idMatricula;
 
-    @Column(name="Nota")
-    private int nota;
-
-    //Clave foránea 1
-    @ManyToOne(fetch = FetchType.LAZY) //Con esta líneas mejoramos el rendimiento a la hora de realizar consultas
-    @JoinColumn(name="idAlumno", referencedColumnName = "DNI_Alumno", nullable = false)
+    // Relación con Alumno
+    @ManyToOne
+    @JoinColumn(name = "IdAlumno", referencedColumnName = "DNI_Alumno")
     private Alumno alumno;
 
-    //Clave foránea 2
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="idAsignatura", referencedColumnName = "IdAsignatura", nullable = false)
+    // Relación con Asignatura
+    @ManyToOne
+    @JoinColumn(name = "IdAsignatura", referencedColumnName = "IdAsignatura")
     private Asignatura asignatura;
 
+    @Column(name = "Nota")
+    private double nota;
 
-    //GETTERS
-    public int getIdNota() {
-        return idNota;
+    public Matricula() {}
+
+    public Matricula(Alumno alumno, Asignatura asignatura, double nota) {
+        this.alumno = alumno;
+        this.asignatura = asignatura;
+        this.nota = nota;
     }
 
-    public int getNota() {
-        return nota;
+    // Getters y Setters
+
+    public int getIdMatricula() {
+        return idMatricula;
+    }
+
+    public void setIdMatricula(int idMatricula) {
+        this.idMatricula = idMatricula;
     }
 
     public Alumno getAlumno() {
         return alumno;
     }
 
-    public Asignatura getAsignatura() {
-        return asignatura;
-    }
-
-
-
-    //SETTERS
-    public void setIdNota(int idNota) {
-        this.idNota = idNota;
-    }
-
-    public void setNota(int nota) {
-        this.nota = nota;
-    }
-
     public void setAlumno(Alumno alumno) {
         this.alumno = alumno;
     }
 
+    public Asignatura getAsignatura() {
+        return asignatura;
+    }
+
     public void setAsignatura(Asignatura asignatura) {
         this.asignatura = asignatura;
+    }
+
+    public double getNota() {
+        return nota;
+    }
+
+    public void setNota(double nota) {
+        this.nota = nota;
     }
 }

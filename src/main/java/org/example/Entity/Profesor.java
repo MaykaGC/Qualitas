@@ -1,8 +1,8 @@
 package org.example.Entity;
+
 import jakarta.persistence.*;
-import java.util.Date;
 
-
+import java.util.List;
 
 @Entity
 @Table(name = "Profesor")
@@ -10,61 +10,82 @@ public class Profesor {
 
     @Id
     @Column(name = "DNI_Profesor")
-    private String dni_Profesor;
+    private String dniProfesor;
 
-    @Column(name = "Nombre_Tutor")
-    private String nombre_Profesor;
+    @Column(name = "Nombre_Profesor")
+    private String nombreProfesor;
 
-    @Column(name = "Email_Tutor")
-    private String email_Profesor;
+    @Column(name = "Email_Profesor")
+    private String emailProfesor;
 
-    @Column(name = "FechaNacimiento_Tutor")
-    private Date fechaNacimiento_Profesor;
+    @Column(name = "Telefono_Profesor")
+    private String telefonoProfesor;
 
-    @Column(name = "Telefono_Tutor")
-    private String telefono_Profesor;
+    @OneToOne
+    @JoinColumn(name = "DNI_Profesor", referencedColumnName = "DNI")
+    private Usuario usuario;
 
+    @OneToMany(mappedBy = "profesor", fetch = FetchType.LAZY)
+    private List<Asignatura> asignaturas;
 
-    //GETTERS
-    public String getDni_Profesor() {
-        return dni_Profesor;
+    public Profesor() {
     }
 
-    public String getNombre_Profesor() {
-        return nombre_Profesor;
+    public Profesor(String dniProfesor, String nombreProfesor, String emailProfesor, String telefonoProfesor, Usuario usuario) {
+        this.dniProfesor = dniProfesor;
+        this.nombreProfesor = nombreProfesor;
+        this.emailProfesor = emailProfesor;
+        this.telefonoProfesor = telefonoProfesor;
+        this.usuario = usuario;
     }
 
-    public String getEmail_Profesor() {
-        return email_Profesor;
+    // Getters and Setters
+
+    public String getDniProfesor() {
+        return dniProfesor;
     }
 
-    public Date getFechaNacimiento_Profesor() {
-        return fechaNacimiento_Profesor;
+    public void setDniProfesor(String dniProfesor) {
+        this.dniProfesor = dniProfesor;
     }
 
-    public String getTelefono_Profesor() {
-        return telefono_Profesor;
+    public String getNombreProfesor() {
+        return nombreProfesor;
     }
 
-
-    //SETTERS
-    public void setDni_Profesor(String dni_Profesor) {
-        this.dni_Profesor = dni_Profesor;
+    public void setNombreProfesor(String nombreProfesor) {
+        this.nombreProfesor = nombreProfesor;
     }
 
-    public void setNombre_Profesor(String nombre_Profesor) {
-        this.nombre_Profesor = nombre_Profesor;
+    public String getEmailProfesor() {
+        return emailProfesor;
     }
 
-    public void setFechaNacimiento_Profesor(Date fechaNacimiento_Profesor) {
-        this.fechaNacimiento_Profesor = fechaNacimiento_Profesor;
+    public void setEmailProfesor(String emailProfesor) {
+        this.emailProfesor = emailProfesor;
     }
 
-    public void setEmail_Profesor(String email_Profesor) {
-        this.email_Profesor = email_Profesor;
+    public String getTelefonoProfesor() {
+        return telefonoProfesor;
     }
 
-    public void setTelefono_Profesor(String telefono_Profesor) {
-        this.telefono_Profesor = telefono_Profesor;
+    public void setTelefonoProfesor(String telefonoProfesor) {
+        this.telefonoProfesor = telefonoProfesor;
+    }
+
+    public Usuario getUsuario() {
+        return usuario;
+    }
+
+    public void setUsuario(Usuario usuario) {
+        this.usuario = usuario;
+    }
+
+    public List<Asignatura> getAsignaturas() {
+        return asignaturas;
+    }
+
+    public void setAsignaturas(List<Asignatura> asignaturas) {
+        this.asignaturas = asignaturas;
     }
 }
