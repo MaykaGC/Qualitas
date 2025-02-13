@@ -112,4 +112,20 @@ public class Profesor {
     public void setAsignaturas(List<Asignatura> asignaturas) {
         this.asignaturas = asignaturas;
     }
+
+    public Date getFechaNacimientoProfesor() {
+        return fechaNacimientoProfesor;
+    }
+
+    public void setFechaNacimientoProfesor(Date fechaNacimientoProfesor) {
+        this.fechaNacimientoProfesor = fechaNacimientoProfesor;
+    }
+
+    public String getDireccionProfesor() {
+        return direccionProfesor;
+    }
+
+    public void setDireccionProfesor(String direccionProfesor) {
+        this.direccionProfesor = direccionProfesor;
+    }
 }
