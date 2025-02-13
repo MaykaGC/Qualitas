@@ -2,6 +2,8 @@ package org.example.Entity;
 
 import jakarta.persistence.*;
 
+import java.util.Date;
+
 @Entity
 @Table(name = "Tutor")
 public class Tutor {
@@ -13,11 +15,17 @@ public class Tutor {
     @Column(name = "Nombre_Tutor")
     private String nombreTutor;
 
-    @Column(name = "Telefono_Tutor")
-    private String telefonoTutor;
+    @Column(name = "Email_Tutor")
+    private String emailTutor;
+
+    @Column(name = "FechaNacimiento_Tutor")
+    private Date fechaNacimientoTutor;
 
     @Column(name = "Direccion_Tutor")
     private String direccionTutor;
+
+    @Column(name = "Telefono_Tutor")
+    private String telefonoTutor;
 
     @OneToOne
     @JoinColumn(name = "DNI_Tutor", referencedColumnName = "DNI")
@@ -26,11 +34,13 @@ public class Tutor {
     public Tutor() {
     }
 
-    public Tutor(String dniTutor, String nombreTutor, String telefonoTutor, String direccionTutor, Usuario usuario) {
+    public Tutor(String dniTutor, String nombreTutor, String emailTutor, Date fechaNacimientoTutor, String direccionTutor, String telefonoTutor, Usuario usuario) {
         this.dniTutor = dniTutor;
         this.nombreTutor = nombreTutor;
-        this.telefonoTutor = telefonoTutor;
+        this.emailTutor = emailTutor;
+        this.fechaNacimientoTutor = fechaNacimientoTutor;
         this.direccionTutor = direccionTutor;
+        this.telefonoTutor = telefonoTutor;
         this.usuario = usuario;
     }
 

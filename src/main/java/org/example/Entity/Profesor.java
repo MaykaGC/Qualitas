@@ -2,6 +2,7 @@ package org.example.Entity;
 
 import jakarta.persistence.*;
 
+import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -18,6 +19,12 @@ public class Profesor {
     @Column(name = "Email_Profesor")
     private String emailProfesor;
 
+    @Column(name = "FechaNacimiento_Profesor")
+    private Date fechaNacimientoProfesor;
+
+    @Column(name = "Direccion_Profesor")
+    private String direccionProfesor;
+
     @Column(name = "Telefono_Profesor")
     private String telefonoProfesor;
 
@@ -31,12 +38,15 @@ public class Profesor {
     public Profesor() {
     }
 
-    public Profesor(String dniProfesor, String nombreProfesor, String emailProfesor, String telefonoProfesor, Usuario usuario) {
+    public Profesor(String dniProfesor, String nombreProfesor, String emailProfesor, Date fechaNacimientoProfesor, String direccionProfesor, String telefonoProfesor, Usuario usuario, List<Asignatura> asignaturas) {
         this.dniProfesor = dniProfesor;
         this.nombreProfesor = nombreProfesor;
         this.emailProfesor = emailProfesor;
+        this.fechaNacimientoProfesor = fechaNacimientoProfesor;
+        this.direccionProfesor = direccionProfesor;
         this.telefonoProfesor = telefonoProfesor;
         this.usuario = usuario;
+        this.asignaturas = asignaturas;
     }
 
     // Getters and Setters

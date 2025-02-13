@@ -35,13 +35,13 @@ public class Alumno {
     @JoinColumn(name = "DNI_Alumno", referencedColumnName = "DNI")
     private Usuario usuario;
 
-    // Relación con la tabla Matricula
+    // Relación con la tabla Matrícula
     @OneToMany(mappedBy = "alumno", fetch = FetchType.LAZY)
     private List<Matricula> matriculas;
 
     public Alumno() {}
 
-    public Alumno(String dniAlumno, String nombreAlumno, String emailAlumno, Date fechaNacimientoAlumno, String direccionAlumno, String telefonoAlumno, Tutor tutor, Usuario usuario) {
+    public Alumno(String dniAlumno, String nombreAlumno, String emailAlumno, Date fechaNacimientoAlumno, String direccionAlumno, String telefonoAlumno, Tutor tutor, Usuario usuario, List<Matricula> matriculas) {
         this.dniAlumno = dniAlumno;
         this.nombreAlumno = nombreAlumno;
         this.emailAlumno = emailAlumno;
@@ -50,6 +50,7 @@ public class Alumno {
         this.telefonoAlumno = telefonoAlumno;
         this.tutor = tutor;
         this.usuario = usuario;
+        this.matriculas = matriculas;
     }
 
     // Getters y Setters
