@@ -3,6 +3,9 @@ package org.example;
 import org.example.DAO.*;
 import org.example.Entity.*;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Scanner;
 
 public class Main {
@@ -18,12 +21,12 @@ public class Main {
     private static String usuarioLogeado;
     private static String rolUsuario;
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws ParseException {
         int opcion;
         do {
             mostrarMenuInicioSesion();
             opcion = scanner.nextInt();
-            scanner.nextLine(); // Limpiar buffer
+            scanner.nextLine();
 
             switch (opcion) {
                 case 1:
@@ -93,14 +96,34 @@ public class Main {
         }
     }
 
-    public static void crearCuenta() {
-        System.out.println("Creando cuenta...");
+    public static void crearCuenta() throws ParseException {
+        System.out.print("""
+                -----------------------
+                ==== Nuevo usuario ====
+                -----------------------
+                """);
         System.out.print("Introduce tu DNI: ");
         String dni = scanner.nextLine();
         System.out.print("Introduce tu nombre: ");
         String nombre = scanner.nextLine();
+        System.out.print("Introduce tu correo electrónico: ");
+        String correoElectronico = scanner.nextLine();
+        System.out.print("Introduce tu contraseña: ");
+        String contrasena = scanner.nextLine();
+        System.out.print("Introduce tu fecha de nacimiento (yyyy/MM/dd): ");
+        String fechaNacimiento = scanner.nextLine();
+        Date miDate = new SimpleDateFormat("dd/MM/yyyy").parse(fechaNacimiento);
+        System.out.print("Introduce tu dirección: ");
+        String direccion = scanner.nextLine();
+        System.out.print("Introduce tu número de teléfono: ");
+        String telefono = scanner.nextLine();
         System.out.print("Introduce tu rol (Alumno/Profesor/Tutor): ");
         String rol = scanner.nextLine();
+        System.out.print("""
+                -----------------------
+                =======================
+                -----------------------
+                """);
 
         if (rol.equalsIgnoreCase("Alumno")) {
             Alumno alumno = new Alumno();
@@ -111,21 +134,29 @@ public class Main {
             Usuario usuarioAlumno = new Usuario(dni, "password123", Usuario.Rol.Alumno);
             usuarioDAO.crearUsuario(usuarioAlumno);
             System.out.println("Cuenta de alumno creada con éxito.");
+
         } else if (rol.equalsIgnoreCase("Profesor")) {
             Profesor profesor = new Profesor();
             profesor.setDniProfesor(dni);
             profesor.setNombreProfesor(nombre);
+            profesor.setEmailProfesor(correoElectronico);
+            profesor.setFechaNacimientoProfesor(miDate);
+            profesor.setDireccionProfesor(direccion);
+            profesor.setTelefonoProfesor(telefono);
+
             // Crear también el usuario para el profesor
-            Usuario usuarioProfesor = new Usuario(dni, "password123", Usuario.Rol.Profesor);
+            Usuario usuarioProfesor = new Usuario(dni, contrasena, Usuario.Rol.Profesor);
             profesorDAO.crearProfesor(profesor, usuarioProfesor);
             System.out.println("Cuenta de profesor creada con éxito.");
+
         } else if (rol.equalsIgnoreCase("Tutor")) {
             Tutor tutor = new Tutor();
             tutor.setDniTutor(dni);
             tutor.setNombreTutor(nombre);
+
             // Crear también el usuario para el tutor
-            Usuario usuarioTutor = new Usuario(dni, "password123", Usuario.Rol.Tutor);
-            usuarioDAO.crearUsuario(usuarioTutor);
+            Usuario usuarioTutor = new Usuario(dni, contrasena, Usuario.Rol.Tutor);
+            //tutorDAO.crearTutor(tutor);
             System.out.println("Cuenta de tutor creada con éxito.");
         } else {
             System.out.println("Rol no válido. Intente nuevamente.");
@@ -136,12 +167,18 @@ public class Main {
     public static void menuAlumno() {
         int opcion;
         do {
-            System.out.println("\n===== MENÚ ALUMNO =====");
-            System.out.println("1. Ver mis notas");
-            System.out.println("2. Cerrar sesión");
-            System.out.print("Selecciona una opción: ");
+            System.out.println("""
+                    -----------------------
+                    ===== Menú alumno =====
+                    -----------------------
+                    1. Ver mis notas
+                    0. Cerrar sesión
+                    -----------------------
+                    =======================
+                    -----------------------
+                    """);
             opcion = scanner.nextInt();
-            scanner.nextLine(); // Limpiar buffer
+            scanner.nextLine();
 
             switch (opcion) {
                 case 1:
@@ -155,7 +192,7 @@ public class Main {
                 default:
                     System.out.println("Opción no válida, por favor intente de nuevo.");
             }
-        } while (opcion != 2);
+        } while (opcion != 0);
     }
 
     public static void verNotasAlumno() {
@@ -178,13 +215,19 @@ public class Main {
     public static void menuProfesor() {
         int opcion;
         do {
-            System.out.println("\n===== MENÚ PROFESOR =====");
-            System.out.println("1. Ver mis asignaturas");
-            System.out.println("2. Añadir una nota");
-            System.out.println("3. Cerrar sesión");
-            System.out.print("Selecciona una opción: ");
+            System.out.println("""
+                    -----------------------
+                    ==== Menú profesor ====
+                    -----------------------
+                    1. Ver mis asignaturas
+                    2. Añadir una nota
+                    0. Cerrar sesión
+                    -----------------------
+                    =======================
+                    -----------------------
+                    """);
             opcion = scanner.nextInt();
-            scanner.nextLine(); // Limpiar buffer
+            scanner.nextLine();
 
             switch (opcion) {
                 case 1:
@@ -201,7 +244,7 @@ public class Main {
                 default:
                     System.out.println("Opción no válida, por favor intente de nuevo.");
             }
-        } while (opcion != 3);
+        } while (opcion != 0);
     }
 
     public static void verAsignaturasProfesor() {
