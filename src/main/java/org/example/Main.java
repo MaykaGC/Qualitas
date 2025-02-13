@@ -1,8 +1,13 @@
 package org.example;
 
+import com.google.protobuf.TextFormat;
 import org.example.DAO.*;
 import org.example.Entity.*;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Scanner;
 
 public class Main {
@@ -18,10 +23,16 @@ public class Main {
     private static String usuarioLogeado;
     private static String rolUsuario;
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws ParseException {
+
         int opcion;
+        //Menú principal con opciones
         do {
-            mostrarMenuInicioSesion();
+            System.out.println("\n===== MENÚ DE INICIO DE SESIÓN =====");
+            System.out.println("1. Iniciar sesión");
+            System.out.println("2. Crear cuenta");
+            System.out.println("3. Salir");
+            System.out.print("Selecciona una opción: ");
             opcion = scanner.nextInt();
             scanner.nextLine(); // Limpiar buffer
 
@@ -33,20 +44,13 @@ public class Main {
                     crearCuenta();
                     break;
                 case 3:
-                    System.out.println("Saliendo de la aplicación...");
+                    System.out.println("...Saliendo de la aplicación...");
                     break;
                 default:
-                    System.out.println("Opción no válida, por favor intente de nuevo.");
+                    System.out.println("Opción no válida. Por favor, elija entre las 3 opciones disponibles.");
             }
-        } while (opcion != 3);
-    }
 
-    public static void mostrarMenuInicioSesion() {
-        System.out.println("\n===== MENÚ DE INICIO DE SESIÓN =====");
-        System.out.println("1. Iniciar sesión");
-        System.out.println("2. Crear cuenta");
-        System.out.println("3. Salir");
-        System.out.print("Selecciona una opción: ");
+        } while (opcion != 3);
     }
 
     public static void iniciarSesion() {
@@ -67,6 +71,7 @@ public class Main {
                 System.out.println("Alumno no encontrado.");
             }
         } else if (rol.equalsIgnoreCase("Profesor")) {
+
             Profesor profesor = new Profesor();
             profesor.setDniProfesor(dni);
             profesor = profesorDAO.obtenerProfesorPorDni(profesor);
@@ -93,15 +98,48 @@ public class Main {
         }
     }
 
-    public static void crearCuenta() {
-        System.out.println("Creando cuenta...");
-        System.out.print("Introduce tu DNI: ");
-        String dni = scanner.nextLine();
-        System.out.print("Introduce tu nombre: ");
-        String nombre = scanner.nextLine();
-        System.out.print("Introduce tu rol (Alumno/Profesor/Tutor): ");
-        String rol = scanner.nextLine();
 
+    public static void crearCuenta() throws ParseException {
+
+        System.out.println("-----------------------------------------------------");
+        System.out.print("Introduce los datos requeridos para crear la cuenta:  \n");
+        System.out.println("-----------------------------------------------------");
+        //Datos requeridos para crear cuenta equivalentes a los atributos de la BD
+
+        //DNI
+        System.out.println("1. Dni: ");
+        String dni = scanner.nextLine();
+
+        //Nombre
+        System.out.print("2. Nombre: ");
+        String nombre = scanner.nextLine();
+
+        //Email
+        System.out.println("3. Email: ");
+        String email = scanner.nextLine();
+
+        //Dirección
+        System.out.println("4. Dirección: ");
+        String direccion = scanner.nextLine();
+
+        //Fecha de nacimiento
+        System.out.println("5. Fecha de nacimiento (dd/MM/yyyy): ");
+        String nacimiento = scanner.next();
+
+        //Convertimos la fecha de String a Date que es el tipo de dato de la BD
+        Date date = new SimpleDateFormat("dd/MM/yyyy").parse(nacimiento);
+        System.out.println("La fecha ha sido convertida al formato establecido.");
+
+        //Teléfono
+        System.out.println("6. Teléfono: ");
+        String telefono = scanner.nextLine();
+
+        System.out.println("------------------------------------------------------------");
+        String rol = scanner.nextLine();
+        System.out.print("A continuación, introduce tu rol (Alumno, profesor o tutor): ");
+
+        //Realizamos un if para comprobar el rol y, así, poder asignarle el rol pertinente
+        //al usuario que ha ingresado los datos
         if (rol.equalsIgnoreCase("Alumno")) {
             Alumno alumno = new Alumno();
             alumno.setDniAlumno(dni);
@@ -111,14 +149,28 @@ public class Main {
             Usuario usuarioAlumno = new Usuario(dni, "password123", Usuario.Rol.Alumno);
             usuarioDAO.crearUsuario(usuarioAlumno);
             System.out.println("Cuenta de alumno creada con éxito.");
+
         } else if (rol.equalsIgnoreCase("Profesor")) {
+            //Creamos objeto profesor
             Profesor profesor = new Profesor();
+            //1
             profesor.setDniProfesor(dni);
+            //2
             profesor.setNombreProfesor(nombre);
+            //3
+            profesor.setEmailProfesor(email);
+            //4
+            profesor.setDireccionProfesor(direccion);
+            //5
+            profesor.setFechaNacimientoProfesor(date);
+            //6
+            profesor.setTelefonoProfesor(telefono);
             // Crear también el usuario para el profesor
             Usuario usuarioProfesor = new Usuario(dni, "password123", Usuario.Rol.Profesor);
             profesorDAO.crearProfesor(profesor, usuarioProfesor);
             System.out.println("Cuenta de profesor creada con éxito.");
+
+
         } else if (rol.equalsIgnoreCase("Tutor")) {
             Tutor tutor = new Tutor();
             tutor.setDniTutor(dni);
