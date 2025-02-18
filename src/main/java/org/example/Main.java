@@ -129,10 +129,16 @@ public class Main {
             Alumno alumno = new Alumno();
             alumno.setDniAlumno(dni);
             alumno.setNombreAlumno(nombre);
-            alumnoDAO.crearAlumno(alumno);
+            alumno.setEmailAlumno(correoElectronico);
+            alumno.setFechaNacimientoAlumno(miDate);
+            alumno.setDireccionAlumno(direccion);
+            alumno.setTelefonoAlumno(telefono);
+
+            // Al crear el alumno pedir el DNI del tutor
+
             // Crear también el usuario para el alumno
-            Usuario usuarioAlumno = new Usuario(dni, "password123", Usuario.Rol.Alumno);
-            usuarioDAO.crearUsuario(usuarioAlumno);
+            Usuario usuarioAlumno = new Usuario(dni, contrasena, Usuario.Rol.Alumno);
+            alumnoDAO.crearAlumno(alumno, usuarioAlumno);
             System.out.println("Cuenta de alumno creada con éxito.");
 
         } else if (rol.equalsIgnoreCase("Profesor")) {
@@ -153,10 +159,14 @@ public class Main {
             Tutor tutor = new Tutor();
             tutor.setDniTutor(dni);
             tutor.setNombreTutor(nombre);
+            tutor.setEmailTutor(correoElectronico);
+            tutor.setFechaNacimientoTutor(miDate);
+            tutor.setDireccionTutor(direccion);
+            tutor.setTelefonoTutor(telefono);
 
             // Crear también el usuario para el tutor
             Usuario usuarioTutor = new Usuario(dni, contrasena, Usuario.Rol.Tutor);
-            //tutorDAO.crearTutor(tutor);
+            tutorDAO.crearTutor(tutor, usuarioTutor);
             System.out.println("Cuenta de tutor creada con éxito.");
         } else {
             System.out.println("Rol no válido. Intente nuevamente.");

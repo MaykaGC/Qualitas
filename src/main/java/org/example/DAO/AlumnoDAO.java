@@ -1,11 +1,18 @@
 package org.example.DAO;
 
 import org.example.Entity.Alumno;
+import org.example.Entity.Usuario;
 import org.example.Utils.UtilsHibernate;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
 public class AlumnoDAO {
+
+    private final UsuarioDAO usuarioDAO;
+
+    public AlumnoDAO() {
+        this.usuarioDAO = new UsuarioDAO();
+    }
 
     // Métod0 para obtener un alumno por su DNI
     public Alumno obtenerAlumnoPorDni(Alumno alumno) {
@@ -15,10 +22,26 @@ public class AlumnoDAO {
     }
 
     // Métod0 para crear un nuevo alumno
-    public void crearAlumno(Alumno alumno) {
+    public void crearAlumno(Alumno alumno, Usuario usuario) {
         Transaction transaction = null;
         try (Session session = UtilsHibernate.getSessionFactory().openSession()) {
             transaction = session.beginTransaction();
+
+            // Primero, verificar si el usuario ya existe en la base de datos
+            Usuario usuarioExistente = usuarioDAO.obtenerUsuarioPorDni(usuario.getDni());
+
+            // Si el usuario no existe, lo creamos
+            if (usuarioExistente == null) {
+                usuarioDAO.crearUsuario(usuario);
+            } else {
+                // Si el usuario ya existe, podemos usar el usuario existente
+                usuario = usuarioExistente;
+            }
+
+            // Establecemos el usuario al alumno
+            alumno.setUsuario(usuario);
+
+            // Ahora persistimos al alumno
             session.persist(alumno);
             transaction.commit();
         } catch (Exception e) {

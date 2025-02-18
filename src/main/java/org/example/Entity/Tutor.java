@@ -44,8 +44,6 @@ public class Tutor {
         this.usuario = usuario;
     }
 
-    // Getters and Setters
-
     public String getDniTutor() {
         return dniTutor;
     }
@@ -62,12 +60,20 @@ public class Tutor {
         this.nombreTutor = nombreTutor;
     }
 
-    public String getTelefonoTutor() {
-        return telefonoTutor;
+    public String getEmailTutor() {
+        return emailTutor;
     }
 
-    public void setTelefonoTutor(String telefonoTutor) {
-        this.telefonoTutor = telefonoTutor;
+    public void setEmailTutor(String emailTutor) {
+        this.emailTutor = emailTutor;
+    }
+
+    public Date getFechaNacimientoTutor() {
+        return fechaNacimientoTutor;
+    }
+
+    public void setFechaNacimientoTutor(Date fechaNacimientoTutor) {
+        this.fechaNacimientoTutor = fechaNacimientoTutor;
     }
 
     public String getDireccionTutor() {
@@ -76,6 +82,14 @@ public class Tutor {
 
     public void setDireccionTutor(String direccionTutor) {
         this.direccionTutor = direccionTutor;
+    }
+
+    public String getTelefonoTutor() {
+        return telefonoTutor;
+    }
+
+    public void setTelefonoTutor(String telefonoTutor) {
+        this.telefonoTutor = telefonoTutor;
     }
 
     public Usuario getUsuario() {
