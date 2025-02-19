@@ -1,15 +1,14 @@
 package org.example;
-
 import org.example.DAO.*;
 import org.example.Entity.*;
-
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Scanner;
 
-public class Main {
 
+public class Main {
+    
     private static final Scanner scanner = new Scanner(System.in);
     private static final AlumnoDAO alumnoDAO = new AlumnoDAO();
     private static final AsignaturaDAO asignaturaDAO = new AsignaturaDAO();
@@ -25,6 +24,7 @@ public class Main {
     public static void main(String[] args) throws ParseException {
         int opcion;
         do {
+            //Se muestra el inicio de sesión
             mostrarMenuInicioSesion();
             opcion = scanner.nextInt();
             scanner.nextLine();
@@ -186,56 +186,6 @@ public class Main {
             default:
                 System.out.println("Rol no válido. Intente nuevamente.");
         }
-//        if (rol.equalsIgnoreCase("Alumno")) {
-//            System.out.print("Introduce el DNI del tutor: ");
-//            String dniTutor = scanner.nextLine();
-//
-//            Alumno alumno = new Alumno();
-//            alumno.setDniAlumno(dni);
-//            alumno.setNombreAlumno(nombre);
-//            alumno.setEmailAlumno(correoElectronico);
-//            alumno.setFechaNacimientoAlumno(miDate);
-//            alumno.setDireccionAlumno(direccion);
-//            alumno.setTelefonoAlumno(telefono);
-//
-//            // Crear también el usuario para el alumno
-//            Usuario usuarioAlumno = new Usuario(dni, contrasena, Usuario.Rol.Alumno);
-//            try {
-//                alumnoDAO.crearAlumno(alumno, usuarioAlumno, dniTutor);
-//            } catch (RuntimeException e) {
-//                System.out.println("No se pudo crear el alumno: " + e.getMessage());
-//                return;
-//            }
-//        } else if (rol.equalsIgnoreCase("Profesor")) {
-//            Profesor profesor = new Profesor();
-//            profesor.setDniProfesor(dni);
-//            profesor.setNombreProfesor(nombre);
-//            profesor.setEmailProfesor(correoElectronico);
-//            profesor.setFechaNacimientoProfesor(miDate);
-//            profesor.setDireccionProfesor(direccion);
-//            profesor.setTelefonoProfesor(telefono);
-//
-//            // Crear también el usuario para el profesor
-//            Usuario usuarioProfesor = new Usuario(dni, contrasena, Usuario.Rol.Profesor);
-//            profesorDAO.crearProfesor(profesor, usuarioProfesor);
-//            System.out.println("Cuenta de profesor creada con éxito.");
-//
-//        } else if (rol.equalsIgnoreCase("Tutor")) {
-//            Tutor tutor = new Tutor();
-//            tutor.setDniTutor(dni);
-//            tutor.setNombreTutor(nombre);
-//            tutor.setEmailTutor(correoElectronico);
-//            tutor.setFechaNacimientoTutor(miDate);
-//            tutor.setDireccionTutor(direccion);
-//            tutor.setTelefonoTutor(telefono);
-//
-//            // Crear también el usuario para el tutor
-//            Usuario usuarioTutor = new Usuario(dni, contrasena, Usuario.Rol.Tutor);
-//            tutorDAO.crearTutor(tutor, usuarioTutor);
-//            System.out.println("Cuenta de tutor creada con éxito.");
-//        } else {
-//            System.out.println("Rol no válido. Intente nuevamente.");
-//        }
     }
 
     // Menú de Alumno
@@ -488,6 +438,36 @@ public class Main {
 
     // Menú de Tutor (por implementar según lo que necesites)
     public static void menuTutor() {
-        // Similar a los menús anteriores. Adaptar según el rol y las acciones disponibles para un Tutor.
+        int opcion;
+        do {
+            System.out.println("""
+                    -----------------------
+                    ===== Menú tutor =====
+                    -----------------------
+                    1. Ver notas.
+                    2. Ver horario.
+                    0. Cerrar sesión.
+                    -----------------------
+                    =======================
+                    -----------------------
+                    """);
+            opcion = scanner.nextInt();
+            scanner.nextLine();
+
+            switch (opcion) {
+                case 1:
+                    verNotasAlumno();
+                    break;
+                case 2:
+                    verHorarioAlumno();
+                    break;
+                case 0:
+                    usuarioLogeado = null;                   rolUsuario = null;
+                    System.out.println("Sesión cerrada.");
+                    break;
+                default:
+                    System.out.println("Opción no válida, por favor intentelo de nuevo.");
+            }
+        } while (opcion != 0);
     }
 }
