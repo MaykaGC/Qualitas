@@ -17,28 +17,9 @@ public class AlumnoDAO {
         this.usuarioDAO = new UsuarioDAO();
     }
 
-    // Métod0 para obtener un alumno por su DNI
-    public Alumno obtenerAlumnoPorDni(Alumno alumno) {
-        try (Session session = UtilsHibernate.getSessionFactory().openSession()) {
-            Alumno result = session.get(Alumno.class, alumno.getDniAlumno());
-            if (result != null) {
-                Hibernate.initialize(result.getMatriculas());
-                for (Matricula matricula : result.getMatriculas()) {
-                    Hibernate.initialize(matricula.getAsignatura());
-                }
-            }
-            return result;
-        }
-    }
-
-//    public Alumno obtenerAlumnoPorDni(Alumno alumno) {
-//        try (Session session = UtilsHibernate.getSessionFactory().openSession()) {
-//            return session.get(Alumno.class, alumno.getDniAlumno());
-//        }
-//    }
-
     // Métod0 para crear un nuevo alumno
     public void crearAlumno(Alumno alumno, Usuario usuario, String dniTutor) {
+
         Transaction transaction = null;
         try (Session session = UtilsHibernate.getSessionFactory().openSession()) {
             transaction = session.beginTransaction();
@@ -83,6 +64,24 @@ public class AlumnoDAO {
             throw new RuntimeException(e);
         }
     }
+
+    // Métod0 para obtener un alumno por su DNI
+    public Alumno obtenerAlumnoPorDni(Alumno alumno) {
+        try (Session session = UtilsHibernate.getSessionFactory().openSession()) {
+            Alumno result = session.get(Alumno.class, alumno.getDniAlumno());
+            if (result != null) {
+                Hibernate.initialize(result.getMatriculas());
+                for (Matricula matricula : result.getMatriculas()) {
+                    Hibernate.initialize(matricula.getAsignatura());
+                }
+            }
+            return result;
+        }
+    }
+
+
+
+
 
     // Métod0 para actualizar los datos de un alumno
     public void actualizarAlumno(Alumno alumno) {

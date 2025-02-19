@@ -156,6 +156,7 @@ public class Main {
                 profesorDAO.crearProfesor(profesor, usuarioProfesor);
                 break;
 
+
             case "tutor":
                 Tutor tutor = new Tutor();
                 tutor.setDniTutor(dni);
@@ -169,7 +170,8 @@ public class Main {
                 Usuario usuarioTutor = new Usuario(dni, contrasena, Usuario.Rol.Tutor);
                 tutorDAO.crearTutor(tutor, usuarioTutor);
                 break;
-            case "administrador":
+
+                case "administrador":
                 Administrador administrador = new Administrador();
                 administrador.setDniAdministrador(dni);
                 administrador.setNombreAdministrador(nombre);
@@ -188,7 +190,7 @@ public class Main {
         }
     }
 
-    // Menú de Alumno
+    //Menú de Alumno
     public static void menuAlumno() {
         int opcion;
         do {
@@ -206,6 +208,8 @@ public class Main {
             opcion = scanner.nextInt();
             scanner.nextLine();
 
+
+            //Opciones que puede realizar el alumno: ver sus nota, ver su horario o cerrar sesión
             switch (opcion) {
                 case 1:
                     verNotasAlumno();
@@ -224,13 +228,17 @@ public class Main {
         } while (opcion != 0);
     }
 
+
     public static void verHorarioAlumno() {
+
         System.out.println("Introduce el DNI del alumno: ");
         String dniAlumno = new Scanner(System.in).nextLine();
         Alumno alumno = new Alumno();
         alumno.setDniAlumno(dniAlumno);
-        alumno = alumnoDAO.obtenerAlumnoPorDni(alumno);
 
+        //Se le asigna a alumno la contante alumnoDao que ha sido declarada al princio¡pio
+        alumno = alumnoDAO.obtenerAlumnoPorDni(alumno);
+        //Si el alumno existe en la base de datos (no es null), se obtiene el horario
         if (alumno != null) {
             System.out.println("Horario de " + alumno.getNombreAlumno() + ":");
             for (Matricula matricula : alumno.getMatriculas()) {
@@ -241,6 +249,7 @@ public class Main {
             System.out.println("Alumno no encontrado.");
         }
     }
+
 
     public static void verNotasAlumno() {
         Alumno alumno = new Alumno();
