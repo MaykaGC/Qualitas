@@ -25,14 +25,14 @@ public class TutorDAO {
     public void crearTutor(Tutor tutor, Usuario usuario) {
         Transaction transaction = null;
         try (Session session = UtilsHibernate.getSessionFactory().openSession()) {
-            transaction = session.beginTransaction();
+
 
             // Primero, verificar si el usuario ya existe en la base de datos
             Usuario usuarioExistente = usuarioDAO.obtenerUsuarioPorDni(usuario.getDni());
 
             // Si el usuario no existe, lo creamos
             if (usuarioExistente == null) {
-                usuarioDAO.crearUsuario(usuario);
+                usuarioDAO.crearUsuario(session, usuario);
             } else {
                 // Si el usuario ya existe, podemos usar el usuario existente
                 usuario = usuarioExistente;
@@ -40,8 +40,10 @@ public class TutorDAO {
 
             tutor.setUsuario(usuario);
 
+            transaction = session.beginTransaction();
             session.persist(tutor);
             transaction.commit();
+            System.out.println("Cuenta de tutor creada con éxito.");
         } catch (Exception e) {
             if (transaction != null) {
                 transaction.rollback();

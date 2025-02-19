@@ -18,7 +18,7 @@ public class Usuario {
     private Rol rol;
 
     public enum Rol {
-        Alumno, Tutor, Profesor
+        Alumno, Tutor, Profesor, Administrador
     }
 
     public Usuario() {}
