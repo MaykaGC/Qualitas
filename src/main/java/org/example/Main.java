@@ -186,56 +186,6 @@ public class Main {
             default:
                 System.out.println("Rol no válido. Intente nuevamente.");
         }
-//        if (rol.equalsIgnoreCase("Alumno")) {
-//            System.out.print("Introduce el DNI del tutor: ");
-//            String dniTutor = scanner.nextLine();
-//
-//            Alumno alumno = new Alumno();
-//            alumno.setDniAlumno(dni);
-//            alumno.setNombreAlumno(nombre);
-//            alumno.setEmailAlumno(correoElectronico);
-//            alumno.setFechaNacimientoAlumno(miDate);
-//            alumno.setDireccionAlumno(direccion);
-//            alumno.setTelefonoAlumno(telefono);
-//
-//            // Crear también el usuario para el alumno
-//            Usuario usuarioAlumno = new Usuario(dni, contrasena, Usuario.Rol.Alumno);
-//            try {
-//                alumnoDAO.crearAlumno(alumno, usuarioAlumno, dniTutor);
-//            } catch (RuntimeException e) {
-//                System.out.println("No se pudo crear el alumno: " + e.getMessage());
-//                return;
-//            }
-//        } else if (rol.equalsIgnoreCase("Profesor")) {
-//            Profesor profesor = new Profesor();
-//            profesor.setDniProfesor(dni);
-//            profesor.setNombreProfesor(nombre);
-//            profesor.setEmailProfesor(correoElectronico);
-//            profesor.setFechaNacimientoProfesor(miDate);
-//            profesor.setDireccionProfesor(direccion);
-//            profesor.setTelefonoProfesor(telefono);
-//
-//            // Crear también el usuario para el profesor
-//            Usuario usuarioProfesor = new Usuario(dni, contrasena, Usuario.Rol.Profesor);
-//            profesorDAO.crearProfesor(profesor, usuarioProfesor);
-//            System.out.println("Cuenta de profesor creada con éxito.");
-//
-//        } else if (rol.equalsIgnoreCase("Tutor")) {
-//            Tutor tutor = new Tutor();
-//            tutor.setDniTutor(dni);
-//            tutor.setNombreTutor(nombre);
-//            tutor.setEmailTutor(correoElectronico);
-//            tutor.setFechaNacimientoTutor(miDate);
-//            tutor.setDireccionTutor(direccion);
-//            tutor.setTelefonoTutor(telefono);
-//
-//            // Crear también el usuario para el tutor
-//            Usuario usuarioTutor = new Usuario(dni, contrasena, Usuario.Rol.Tutor);
-//            tutorDAO.crearTutor(tutor, usuarioTutor);
-//            System.out.println("Cuenta de tutor creada con éxito.");
-//        } else {
-//            System.out.println("Rol no válido. Intente nuevamente.");
-//        }
     }
 
     // Menú de Alumno
@@ -275,8 +225,10 @@ public class Main {
     }
 
     public static void verHorarioAlumno() {
+        System.out.println("Introduce el DNI del alumno: ");
+        String dniAlumno = new Scanner(System.in).nextLine();
         Alumno alumno = new Alumno();
-        alumno.setDniAlumno(usuarioLogeado);
+        alumno.setDniAlumno(dniAlumno);
         alumno = alumnoDAO.obtenerAlumnoPorDni(alumno);
 
         if (alumno != null) {
@@ -326,7 +278,7 @@ public class Main {
 
             switch (opcion) {
                 case 1:
-                    verAsignaturasProfesor();
+                    verAsignaturasProfesorProfesor();
                     break;
                 case 2:
                     añadirNota();
@@ -343,14 +295,39 @@ public class Main {
     }
 
     public static void verAsignaturasProfesor() {
+        System.out.println("Introduce el DNI del profesor: ");
+        String dniProfesor = new Scanner(System.in).nextLine();
+        Profesor profesor = new Profesor();
+        profesor.setDniProfesor(dniProfesor);
+        profesor = profesorDAO.obtenerProfesorPorDni(profesor);
+
+        if (profesor != null) {
+            System.out.println("Asignaturas de " + profesor.getNombreProfesor() + ":");
+            if (profesor.getAsignaturas().isEmpty()) {
+                System.out.println("No tiene asignaturas asignadas.");
+            } else {
+                for (Asignatura asignatura : profesor.getAsignaturas()) {
+                    System.out.println("Asignatura: " + asignatura.getNombreAsignatura());
+                }
+            }
+        } else {
+            System.out.println("Profesor no encontrado.");
+        }
+    }
+
+    public static void verAsignaturasProfesorProfesor() {
         Profesor profesor = new Profesor();
         profesor.setDniProfesor(usuarioLogeado);
         profesor = profesorDAO.obtenerProfesorPorDni(profesor);
 
         if (profesor != null) {
             System.out.println("Asignaturas de " + profesor.getNombreProfesor() + ":");
-            for (Asignatura asignatura : profesor.getAsignaturas()) {
-                System.out.println("Asignatura: " + asignatura.getNombreAsignatura());
+            if (profesor.getAsignaturas().isEmpty()) {
+                System.out.println("No tiene asignaturas asignadas.");
+            } else {
+                for (Asignatura asignatura : profesor.getAsignaturas()) {
+                    System.out.println("Asignatura: " + asignatura.getNombreAsignatura());
+                }
             }
         } else {
             System.out.println("Profesor no encontrado.");
@@ -375,13 +352,16 @@ public class Main {
                 System.out.print("Introduce la nueva nota para la asignatura " + asignatura.getNombreAsignatura() + ": ");
                 double nota = scanner.nextDouble();
 
-                // Actualizar o crear la matrícula
-                Matricula matricula = new Matricula();
-                matricula.setAlumno(alumno);
-                matricula.setAsignatura(asignatura);
+                // Cargar la matrícula existente desde la base de datos
+                Matricula matricula = matriculaDAO.obtenerMatriculaPorAlumnoYAsignatura(alumno, asignatura);
+                if (matricula == null) {
+                    matricula = new Matricula();
+                    matricula.setAlumno(alumno);
+                    matricula.setAsignatura(asignatura);
+                }
                 matricula.setNota(nota);
 
-                matriculaDAO.actualizarMatricula(matricula);  // O crear si no existe
+                matriculaDAO.actualizarMatricula(matricula);
                 System.out.println("Nota actualizada con éxito.");
             } else {
                 System.out.println("Asignatura no encontrada.");
@@ -401,7 +381,7 @@ public class Main {
                     1. Asignar asignatura a profesor
                     2. Matricular alumno en asignatura
                     3. Ver asignaturas de profesor
-                    4. Ver asignaturas de alumno
+                    4. Ver horario de alumno
                     5. Crear asignatura
                     0. Cerrar sesión
                     ------------------------------------

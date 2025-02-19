@@ -1,5 +1,7 @@
 package org.example.DAO;
 
+import org.example.Entity.Alumno;
+import org.example.Entity.Asignatura;
 import org.example.Entity.Matricula;
 import org.example.Utils.UtilsHibernate;
 import org.hibernate.Session;
@@ -29,7 +31,17 @@ public class MatriculaDAO {
         }
     }
 
-    // Métod0 para actualizar los datos de una matrícula
+    // Métod0 para obtener una matrícula por alumno y asignatura en la clase MatriculaDAO
+    public Matricula obtenerMatriculaPorAlumnoYAsignatura(Alumno alumno, Asignatura asignatura) {
+        try (Session session = UtilsHibernate.getSessionFactory().openSession()) {
+            return session.createQuery("FROM Matricula WHERE alumno = :alumno AND asignatura = :asignatura", Matricula.class)
+                    .setParameter("alumno", alumno)
+                    .setParameter("asignatura", asignatura)
+                    .uniqueResult();
+        }
+    }
+
+    // Métod0 para actualizar los datos de una matrícula en la clase MatriculaDAO
     public void actualizarMatricula(Matricula matricula) {
         Transaction transaction = null;
         try (Session session = UtilsHibernate.getSessionFactory().openSession()) {

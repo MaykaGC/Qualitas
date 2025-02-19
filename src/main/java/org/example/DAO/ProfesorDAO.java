@@ -5,6 +5,7 @@ import org.example.Entity.Usuario;
 import org.example.Utils.UtilsHibernate;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import org.hibernate.query.Query;
 
 public class ProfesorDAO {
 
@@ -16,10 +17,27 @@ public class ProfesorDAO {
 
     // Método para obtener un profesor por su DNI
     public Profesor obtenerProfesorPorDni(Profesor profesor) {
+        Transaction transaction = null;
+        Profesor result = null;
         try (Session session = UtilsHibernate.getSessionFactory().openSession()) {
-            return session.get(Profesor.class, profesor.getDniProfesor());
+            transaction = session.beginTransaction();
+            Query<Profesor> query = session.createQuery(
+                    "FROM Profesor p LEFT JOIN FETCH p.asignaturas WHERE p.dniProfesor = :dni", Profesor.class);
+            query.setParameter("dni", profesor.getDniProfesor());
+            result = query.uniqueResult();
+            transaction.commit();
+        } catch (Exception e) {
+            if (transaction != null) transaction.rollback();
+            throw new RuntimeException(e);
         }
+        return result;
     }
+
+//    public Profesor obtenerProfesorPorDni(Profesor profesor) {
+//        try (Session session = UtilsHibernate.getSessionFactory().openSession()) {
+//            return session.get(Profesor.class, profesor.getDniProfesor());
+//        }
+//    }
 
     // Método para crear un nuevo profesor, incluyendo su usuario
     public void crearProfesor(Profesor profesor, Usuario usuario) {
