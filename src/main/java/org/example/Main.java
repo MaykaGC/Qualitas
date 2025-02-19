@@ -225,8 +225,10 @@ public class Main {
     }
 
     public static void verHorarioAlumno() {
+        System.out.println("Introduce el DNI del alumno: ");
+        String dniAlumno = new Scanner(System.in).nextLine();
         Alumno alumno = new Alumno();
-        alumno.setDniAlumno(usuarioLogeado);
+        alumno.setDniAlumno(dniAlumno);
         alumno = alumnoDAO.obtenerAlumnoPorDni(alumno);
 
         if (alumno != null) {
@@ -276,7 +278,7 @@ public class Main {
 
             switch (opcion) {
                 case 1:
-                    verAsignaturasProfesor();
+                    verAsignaturasProfesorProfesor();
                     break;
                 case 2:
                     añadirNota();
@@ -293,14 +295,39 @@ public class Main {
     }
 
     public static void verAsignaturasProfesor() {
+        System.out.println("Introduce el DNI del profesor: ");
+        String dniProfesor = new Scanner(System.in).nextLine();
+        Profesor profesor = new Profesor();
+        profesor.setDniProfesor(dniProfesor);
+        profesor = profesorDAO.obtenerProfesorPorDni(profesor);
+
+        if (profesor != null) {
+            System.out.println("Asignaturas de " + profesor.getNombreProfesor() + ":");
+            if (profesor.getAsignaturas().isEmpty()) {
+                System.out.println("No tiene asignaturas asignadas.");
+            } else {
+                for (Asignatura asignatura : profesor.getAsignaturas()) {
+                    System.out.println("Asignatura: " + asignatura.getNombreAsignatura());
+                }
+            }
+        } else {
+            System.out.println("Profesor no encontrado.");
+        }
+    }
+
+    public static void verAsignaturasProfesorProfesor() {
         Profesor profesor = new Profesor();
         profesor.setDniProfesor(usuarioLogeado);
         profesor = profesorDAO.obtenerProfesorPorDni(profesor);
 
         if (profesor != null) {
             System.out.println("Asignaturas de " + profesor.getNombreProfesor() + ":");
-            for (Asignatura asignatura : profesor.getAsignaturas()) {
-                System.out.println("Asignatura: " + asignatura.getNombreAsignatura());
+            if (profesor.getAsignaturas().isEmpty()) {
+                System.out.println("No tiene asignaturas asignadas.");
+            } else {
+                for (Asignatura asignatura : profesor.getAsignaturas()) {
+                    System.out.println("Asignatura: " + asignatura.getNombreAsignatura());
+                }
             }
         } else {
             System.out.println("Profesor no encontrado.");
@@ -325,13 +352,16 @@ public class Main {
                 System.out.print("Introduce la nueva nota para la asignatura " + asignatura.getNombreAsignatura() + ": ");
                 double nota = scanner.nextDouble();
 
-                // Actualizar o crear la matrícula
-                Matricula matricula = new Matricula();
-                matricula.setAlumno(alumno);
-                matricula.setAsignatura(asignatura);
+                // Cargar la matrícula existente desde la base de datos
+                Matricula matricula = matriculaDAO.obtenerMatriculaPorAlumnoYAsignatura(alumno, asignatura);
+                if (matricula == null) {
+                    matricula = new Matricula();
+                    matricula.setAlumno(alumno);
+                    matricula.setAsignatura(asignatura);
+                }
                 matricula.setNota(nota);
 
-                matriculaDAO.actualizarMatricula(matricula);  // O crear si no existe
+                matriculaDAO.actualizarMatricula(matricula);
                 System.out.println("Nota actualizada con éxito.");
             } else {
                 System.out.println("Asignatura no encontrada.");
@@ -351,7 +381,7 @@ public class Main {
                     1. Asignar asignatura a profesor
                     2. Matricular alumno en asignatura
                     3. Ver asignaturas de profesor
-                    4. Ver asignaturas de alumno
+                    4. Ver horario de alumno
                     5. Crear asignatura
                     0. Cerrar sesión
                     ------------------------------------
