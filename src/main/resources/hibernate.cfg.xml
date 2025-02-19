@@ -9,7 +9,8 @@
         <property name="hibernate.connection.url">jdbc:mysql://localhost:3306/qualitas</property>
         <property name="hibernate.connection.username">root</property>
         <property name="hibernate.connection.password">123456</property>
-        <property name="hibernate.show_sql">false</property>
+        <property name="hibernate.show_sql">true</property>
+        <property name="hibernate.format_sql">true</property>
         <property name="hibernate.hbm2dd1.auto">update</property>
 
         <mapping class="org.example.Entity.Usuario"/>
@@ -18,5 +19,6 @@
         <mapping class="org.example.Entity.Matricula"/>
         <mapping class="org.example.Entity.Profesor"/>
         <mapping class="org.example.Entity.Tutor"/>
+        <mapping class="org.example.Entity.Administrador"/>
     </session-factory>
 </hibernate-configuration>

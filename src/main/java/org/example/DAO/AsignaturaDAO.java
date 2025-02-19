@@ -14,15 +14,6 @@ public class AsignaturaDAO {
         }
     }
 
-    // Métod0 para obtener una asignatura por el nombre
-//    public Asignatura obtenerAsignaturaPorNombre(Asignatura asignatura) {
-//        try (Session session = UtilsHibernate.getSessionFactory().openSession()) {
-//            return session.createQuery("FROM Asignatura WHERE Nombre_Asignatura = :nombre", Asignatura.class)
-//                    .setParameter("nombre", asignatura.getNombreAsignatura())
-//                    .uniqueResult();
-//        }
-//    }
-
     // Métod0 para crear una nueva asignatura
     public void crearAsignatura(Asignatura asignatura) {
         Transaction transaction = null;

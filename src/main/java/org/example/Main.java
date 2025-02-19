@@ -1,10 +1,8 @@
 package org.example;
 
-import com.google.protobuf.TextFormat;
 import org.example.DAO.*;
 import org.example.Entity.*;
 
-import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -18,23 +16,18 @@ public class Main {
     private static final MatriculaDAO matriculaDAO = new MatriculaDAO();
     private static final ProfesorDAO profesorDAO = new ProfesorDAO();
     private static final TutorDAO tutorDAO = new TutorDAO();
+    private static final AdministradorDAO administradorDAO = new AdministradorDAO();
     private static final UsuarioDAO usuarioDAO = new UsuarioDAO();
 
     private static String usuarioLogeado;
     private static String rolUsuario;
 
     public static void main(String[] args) throws ParseException {
-
         int opcion;
-        //Menú principal con opciones
         do {
-            System.out.println("\n===== MENÚ DE INICIO DE SESIÓN =====");
-            System.out.println("1. Iniciar sesión");
-            System.out.println("2. Crear cuenta");
-            System.out.println("3. Salir");
-            System.out.print("Selecciona una opción: ");
+            mostrarMenuInicioSesion();
             opcion = scanner.nextInt();
-            scanner.nextLine(); // Limpiar buffer
+            scanner.nextLine();
 
             switch (opcion) {
                 case 1:
@@ -43,163 +36,234 @@ public class Main {
                 case 2:
                     crearCuenta();
                     break;
-                case 3:
-                    System.out.println("...Saliendo de la aplicación...");
+                case 0:
+                    System.out.println("Saliendo de la aplicación...");
                     break;
                 default:
-                    System.out.println("Opción no válida. Por favor, elija entre las 3 opciones disponibles.");
+                    System.out.println("Opción no válida, por favor intente de nuevo.");
             }
+        } while (opcion != 0);
+    }
 
-        } while (opcion != 3);
+    public static void mostrarMenuInicioSesion() {
+        System.out.println("""
+                ------------------------
+                === Inicio de sesión ===
+                ------------------------
+                1. Iniciar sesión
+                2. Crear cuenta
+                0. Salir
+                ------------------------
+                ========================
+                ------------------------
+                """);
     }
 
     public static void iniciarSesion() {
         System.out.print("Introduce tu DNI: ");
         String dni = scanner.nextLine();
-        System.out.print("Introduce tu rol (Alumno/Profesor/Tutor): ");
-        String rol = scanner.nextLine();
+        System.out.print("Introduce tu contraseña: ");
+        String password = scanner.nextLine();
 
-        if (rol.equalsIgnoreCase("Alumno")) {
-            Alumno alumno = new Alumno();
-            alumno.setDniAlumno(dni);
-            alumno = alumnoDAO.obtenerAlumnoPorDni(alumno);
-            if (alumno != null) {
-                usuarioLogeado = dni;
-                rolUsuario = "Alumno";
-                menuAlumno();
-            } else {
-                System.out.println("Alumno no encontrado.");
-            }
-        } else if (rol.equalsIgnoreCase("Profesor")) {
-
-            Profesor profesor = new Profesor();
-            profesor.setDniProfesor(dni);
-            profesor = profesorDAO.obtenerProfesorPorDni(profesor);
-            if (profesor != null) {
-                usuarioLogeado = dni;
-                rolUsuario = "Profesor";
-                menuProfesor();
-            } else {
-                System.out.println("Profesor no encontrado.");
-            }
-        } else if (rol.equalsIgnoreCase("Tutor")) {
-            Tutor tutor = new Tutor();
-            tutor.setDniTutor(dni);
-            tutor = tutorDAO.obtenerTutorPorDni(tutor);
-            if (tutor != null) {
-                usuarioLogeado = dni;
-                rolUsuario = "Tutor";
-                menuTutor();
-            } else {
-                System.out.println("Tutor no encontrado.");
+        Usuario usuario = usuarioDAO.verificarCredenciales(dni, password);
+        if (usuario != null) {
+            usuarioLogeado = dni;
+            rolUsuario = usuario.getRol().toString();
+            switch (rolUsuario) {
+                case "Alumno":
+                    menuAlumno();
+                    break;
+                case "Profesor":
+                    menuProfesor();
+                    break;
+                case "Tutor":
+                    menuTutor();
+                    break;
+                case "Administrador":
+                    menuAdministrador();
+                    break;
+                default:
+                    System.out.println("Rol no válido. Intente nuevamente.");
             }
         } else {
-            System.out.println("Rol no válido. Intente nuevamente.");
+            System.out.println("Credenciales incorrectas. Intente nuevamente.");
         }
     }
 
-
     public static void crearCuenta() throws ParseException {
-
-        System.out.println("-----------------------------------------------------");
-        System.out.print("Introduce los datos requeridos para crear la cuenta:  \n");
-        System.out.println("-----------------------------------------------------");
-        //Datos requeridos para crear cuenta equivalentes a los atributos de la BD
-
-        //DNI
-        System.out.println("1. Dni: ");
+        System.out.print("""
+                -----------------------
+                ==== Nuevo usuario ====
+                -----------------------
+                """);
+        System.out.print("Introduce tu DNI: ");
         String dni = scanner.nextLine();
-
-        //Nombre
-        System.out.print("2. Nombre: ");
+        System.out.print("Introduce tu nombre: ");
         String nombre = scanner.nextLine();
-
-        //Email
-        System.out.println("3. Email: ");
-        String email = scanner.nextLine();
-
-        //Dirección
-        System.out.println("4. Dirección: ");
+        System.out.print("Introduce tu correo electrónico: ");
+        String correoElectronico = scanner.nextLine();
+        System.out.print("Introduce tu contraseña: ");
+        String contrasena = scanner.nextLine();
+        System.out.print("Introduce tu fecha de nacimiento (dd/MM/yyyy): ");
+        String fechaNacimiento = scanner.nextLine();
+        Date miDate = new SimpleDateFormat("dd/MM/yyyy").parse(fechaNacimiento);
+        System.out.print("Introduce tu dirección: ");
         String direccion = scanner.nextLine();
-
-        //Fecha de nacimiento
-        System.out.println("5. Fecha de nacimiento (dd/MM/yyyy): ");
-        String nacimiento = scanner.next();
-
-        //Convertimos la fecha de String a Date que es el tipo de dato de la BD
-        Date date = new SimpleDateFormat("dd/MM/yyyy").parse(nacimiento);
-        System.out.println("La fecha ha sido convertida al formato establecido.");
-
-        //Teléfono
-        System.out.println("6. Teléfono: ");
+        System.out.print("Introduce tu número de teléfono: ");
         String telefono = scanner.nextLine();
+        System.out.print("Introduce tu rol (Alumno/Profesor/Tutor): ");
+        String rol = scanner.nextLine().toLowerCase().trim();
+        System.out.print("""
+                -----------------------
+                =======================
+                -----------------------
+                """);
 
-        System.out.println("------------------------------------------------------------");
-        String rol = scanner.nextLine();
-        System.out.print("A continuación, introduce tu rol (Alumno, profesor o tutor): ");
+        switch (rol) {
+            case "alumno":
+                System.out.print("Introduce el DNI del tutor: ");
+                String dniTutor = scanner.nextLine();
 
-        //Realizamos un if para comprobar el rol y, así, poder asignarle el rol pertinente
-        //al usuario que ha ingresado los datos
-        if (rol.equalsIgnoreCase("Alumno")) {
-            Alumno alumno = new Alumno();
-            alumno.setDniAlumno(dni);
-            alumno.setNombreAlumno(nombre);
-            alumnoDAO.crearAlumno(alumno);
-            // Crear también el usuario para el alumno
-            Usuario usuarioAlumno = new Usuario(dni, "password123", Usuario.Rol.Alumno);
-            usuarioDAO.crearUsuario(usuarioAlumno);
-            System.out.println("Cuenta de alumno creada con éxito.");
+                Alumno alumno = new Alumno();
+                alumno.setDniAlumno(dni);
+                alumno.setNombreAlumno(nombre);
+                alumno.setEmailAlumno(correoElectronico);
+                alumno.setFechaNacimientoAlumno(miDate);
+                alumno.setDireccionAlumno(direccion);
+                alumno.setTelefonoAlumno(telefono);
 
-        } else if (rol.equalsIgnoreCase("Profesor")) {
-            //Creamos objeto profesor
-            Profesor profesor = new Profesor();
-            //1
-            profesor.setDniProfesor(dni);
-            //2
-            profesor.setNombreProfesor(nombre);
-            //3
-            profesor.setEmailProfesor(email);
-            //4
-            profesor.setDireccionProfesor(direccion);
-            //5
-            profesor.setFechaNacimientoProfesor(date);
-            //6
-            profesor.setTelefonoProfesor(telefono);
-            // Crear también el usuario para el profesor
-            Usuario usuarioProfesor = new Usuario(dni, "password123", Usuario.Rol.Profesor);
-            profesorDAO.crearProfesor(profesor, usuarioProfesor);
-            System.out.println("Cuenta de profesor creada con éxito.");
+                // Crear también el usuario para el alumno
+                Usuario usuarioAlumno = new Usuario(dni, contrasena, Usuario.Rol.Alumno);
+                try {
+                    alumnoDAO.crearAlumno(alumno, usuarioAlumno, dniTutor);
+                } catch (RuntimeException e) {
+                    System.out.println("No se pudo crear el alumno: " + e.getMessage());
+                    return;
+                }
+                break;
 
+            case "profesor":
+                Profesor profesor = new Profesor();
+                profesor.setDniProfesor(dni);
+                profesor.setNombreProfesor(nombre);
+                profesor.setEmailProfesor(correoElectronico);
+                profesor.setFechaNacimientoProfesor(miDate);
+                profesor.setDireccionProfesor(direccion);
+                profesor.setTelefonoProfesor(telefono);
 
-        } else if (rol.equalsIgnoreCase("Tutor")) {
-            Tutor tutor = new Tutor();
-            tutor.setDniTutor(dni);
-            tutor.setNombreTutor(nombre);
-            // Crear también el usuario para el tutor
-            Usuario usuarioTutor = new Usuario(dni, "password123", Usuario.Rol.Tutor);
-            usuarioDAO.crearUsuario(usuarioTutor);
-            System.out.println("Cuenta de tutor creada con éxito.");
-        } else {
-            System.out.println("Rol no válido. Intente nuevamente.");
+                // Crear también el usuario para el profesor
+                Usuario usuarioProfesor = new Usuario(dni, contrasena, Usuario.Rol.Profesor);
+                profesorDAO.crearProfesor(profesor, usuarioProfesor);
+                break;
+
+            case "tutor":
+                Tutor tutor = new Tutor();
+                tutor.setDniTutor(dni);
+                tutor.setNombreTutor(nombre);
+                tutor.setEmailTutor(correoElectronico);
+                tutor.setFechaNacimientoTutor(miDate);
+                tutor.setDireccionTutor(direccion);
+                tutor.setTelefonoTutor(telefono);
+
+                // Crear también el usuario para el tutor
+                Usuario usuarioTutor = new Usuario(dni, contrasena, Usuario.Rol.Tutor);
+                tutorDAO.crearTutor(tutor, usuarioTutor);
+                break;
+            case "administrador":
+                Administrador administrador = new Administrador();
+                administrador.setDniAdministrador(dni);
+                administrador.setNombreAdministrador(nombre);
+                administrador.setEmailAdministrador(correoElectronico);
+                administrador.setFechaNacimientoAdministrador(miDate);
+                administrador.setDireccionAdministrador(direccion);
+                administrador.setTelefonoAdministrador(telefono);
+
+                // Crear también el usuario para el administrador
+                Usuario usuarioAdministrador = new Usuario(dni, contrasena, Usuario.Rol.Administrador);
+                administradorDAO.crearAdministrador(administrador, usuarioAdministrador);
+                break;
+
+            default:
+                System.out.println("Rol no válido. Intente nuevamente.");
         }
+//        if (rol.equalsIgnoreCase("Alumno")) {
+//            System.out.print("Introduce el DNI del tutor: ");
+//            String dniTutor = scanner.nextLine();
+//
+//            Alumno alumno = new Alumno();
+//            alumno.setDniAlumno(dni);
+//            alumno.setNombreAlumno(nombre);
+//            alumno.setEmailAlumno(correoElectronico);
+//            alumno.setFechaNacimientoAlumno(miDate);
+//            alumno.setDireccionAlumno(direccion);
+//            alumno.setTelefonoAlumno(telefono);
+//
+//            // Crear también el usuario para el alumno
+//            Usuario usuarioAlumno = new Usuario(dni, contrasena, Usuario.Rol.Alumno);
+//            try {
+//                alumnoDAO.crearAlumno(alumno, usuarioAlumno, dniTutor);
+//            } catch (RuntimeException e) {
+//                System.out.println("No se pudo crear el alumno: " + e.getMessage());
+//                return;
+//            }
+//        } else if (rol.equalsIgnoreCase("Profesor")) {
+//            Profesor profesor = new Profesor();
+//            profesor.setDniProfesor(dni);
+//            profesor.setNombreProfesor(nombre);
+//            profesor.setEmailProfesor(correoElectronico);
+//            profesor.setFechaNacimientoProfesor(miDate);
+//            profesor.setDireccionProfesor(direccion);
+//            profesor.setTelefonoProfesor(telefono);
+//
+//            // Crear también el usuario para el profesor
+//            Usuario usuarioProfesor = new Usuario(dni, contrasena, Usuario.Rol.Profesor);
+//            profesorDAO.crearProfesor(profesor, usuarioProfesor);
+//            System.out.println("Cuenta de profesor creada con éxito.");
+//
+//        } else if (rol.equalsIgnoreCase("Tutor")) {
+//            Tutor tutor = new Tutor();
+//            tutor.setDniTutor(dni);
+//            tutor.setNombreTutor(nombre);
+//            tutor.setEmailTutor(correoElectronico);
+//            tutor.setFechaNacimientoTutor(miDate);
+//            tutor.setDireccionTutor(direccion);
+//            tutor.setTelefonoTutor(telefono);
+//
+//            // Crear también el usuario para el tutor
+//            Usuario usuarioTutor = new Usuario(dni, contrasena, Usuario.Rol.Tutor);
+//            tutorDAO.crearTutor(tutor, usuarioTutor);
+//            System.out.println("Cuenta de tutor creada con éxito.");
+//        } else {
+//            System.out.println("Rol no válido. Intente nuevamente.");
+//        }
     }
 
     // Menú de Alumno
     public static void menuAlumno() {
         int opcion;
         do {
-            System.out.println("\n===== MENÚ ALUMNO =====");
-            System.out.println("1. Ver mis notas");
-            System.out.println("2. Cerrar sesión");
-            System.out.print("Selecciona una opción: ");
+            System.out.println("""
+                    -----------------------
+                    ===== Menú alumno =====
+                    -----------------------
+                    1. Ver mis notas
+                    2. Ver mi horario
+                    0. Cerrar sesión
+                    -----------------------
+                    =======================
+                    -----------------------
+                    """);
             opcion = scanner.nextInt();
-            scanner.nextLine(); // Limpiar buffer
+            scanner.nextLine();
 
             switch (opcion) {
                 case 1:
                     verNotasAlumno();
                     break;
                 case 2:
+                    verHorarioAlumno();
+                    break;
+                case 0:
                     usuarioLogeado = null;
                     rolUsuario = null;
                     System.out.println("Sesión cerrada.");
@@ -207,7 +271,23 @@ public class Main {
                 default:
                     System.out.println("Opción no válida, por favor intente de nuevo.");
             }
-        } while (opcion != 2);
+        } while (opcion != 0);
+    }
+
+    public static void verHorarioAlumno() {
+        Alumno alumno = new Alumno();
+        alumno.setDniAlumno(usuarioLogeado);
+        alumno = alumnoDAO.obtenerAlumnoPorDni(alumno);
+
+        if (alumno != null) {
+            System.out.println("Horario de " + alumno.getNombreAlumno() + ":");
+            for (Matricula matricula : alumno.getMatriculas()) {
+                Asignatura asignatura = matricula.getAsignatura();
+                System.out.println("Asignatura: " + asignatura.getNombreAsignatura() + " - Curso: " + asignatura.getCurso());
+            }
+        } else {
+            System.out.println("Alumno no encontrado.");
+        }
     }
 
     public static void verNotasAlumno() {
@@ -230,13 +310,19 @@ public class Main {
     public static void menuProfesor() {
         int opcion;
         do {
-            System.out.println("\n===== MENÚ PROFESOR =====");
-            System.out.println("1. Ver mis asignaturas");
-            System.out.println("2. Añadir una nota");
-            System.out.println("3. Cerrar sesión");
-            System.out.print("Selecciona una opción: ");
+            System.out.println("""
+                    -----------------------
+                    ==== Menú profesor ====
+                    -----------------------
+                    1. Ver mis asignaturas
+                    2. Añadir una nota
+                    0. Cerrar sesión
+                    -----------------------
+                    =======================
+                    -----------------------
+                    """);
             opcion = scanner.nextInt();
-            scanner.nextLine(); // Limpiar buffer
+            scanner.nextLine();
 
             switch (opcion) {
                 case 1:
@@ -253,7 +339,7 @@ public class Main {
                 default:
                     System.out.println("Opción no válida, por favor intente de nuevo.");
             }
-        } while (opcion != 3);
+        } while (opcion != 0);
     }
 
     public static void verAsignaturasProfesor() {
@@ -302,6 +388,101 @@ public class Main {
             }
         } else {
             System.out.println("Alumno no encontrado.");
+        }
+    }
+
+    public static void menuAdministrador() {
+        int opcion;
+        do {
+            System.out.println("""
+                    ------------------------------------
+                    ======== Menú Administrador ========
+                    ------------------------------------
+                    1. Asignar asignatura a profesor
+                    2. Matricular alumno en asignatura
+                    3. Ver asignaturas de profesor
+                    4. Ver asignaturas de alumno
+                    5. Crear asignatura
+                    0. Cerrar sesión
+                    ------------------------------------
+                    ====================================
+                    ------------------------------------
+                    """);
+            opcion = scanner.nextInt();
+            scanner.nextLine();
+
+            switch (opcion) {
+                case 1 -> asignarAsignaturaProfesor();
+                case 2 -> matricularAlumnoEnAsignatura();
+                case 3 -> verAsignaturasProfesor();
+                case 4 -> verHorarioAlumno();
+                case 5 -> crearAsignatura();
+                case 0 -> {
+                    usuarioLogeado = null;
+                    rolUsuario = null;
+                    System.out.println("Sesión cerrada.");
+                }
+                default -> System.out.println("Opción no válida.");
+            }
+        } while (opcion != 0);
+    }
+
+    private static void asignarAsignaturaProfesor() {
+        System.out.print("DNI del profesor: ");
+        String dniProfesor = scanner.nextLine();
+        System.out.print("ID de la asignatura: ");
+        int idAsignatura = scanner.nextInt();
+        scanner.nextLine();
+
+        try {
+            administradorDAO.asignarAsignaturaProfesor(idAsignatura, dniProfesor);
+            System.out.println("Asignatura asignada correctamente al profesor.");
+        } catch (Exception e) {
+            System.out.println("Error al asignar la asignatura: " + e.getMessage());
+        }
+    }
+
+    private static void matricularAlumnoEnAsignatura() {
+        System.out.print("DNI del alumno: ");
+        String dniAlumno = scanner.nextLine();
+        System.out.print("ID de la asignatura: ");
+        int idAsignatura = scanner.nextInt();
+        scanner.nextLine();
+
+        try {
+            administradorDAO.matricularAlumnoEnAsignatura(dniAlumno, idAsignatura);
+            System.out.println("Alumno matriculado correctamente en la asignatura.");
+        } catch (Exception e) {
+            System.out.println("Error al matricular al alumno: " + e.getMessage());
+        }
+    }
+
+    private static void crearAsignatura() {
+        System.out.print("Nombre de la asignatura: ");
+        String nombre = scanner.nextLine();
+        System.out.print("Curso: ");
+        String curso = scanner.nextLine();
+
+        try {
+            Asignatura asignatura = new Asignatura();
+            asignatura.setNombreAsignatura(nombre);
+            asignatura.setCurso(curso);
+
+            administradorDAO.crearAsignatura(asignatura);
+
+            // Si el Administrador desea asignar un Profesor más tarde
+            System.out.print("¿Deseas asignar un profesor a esta asignatura ahora? (s/n): ");
+            String respuesta = scanner.nextLine();
+            if (respuesta.equalsIgnoreCase("s")) {
+                System.out.print("DNI del Profesor: ");
+                String dniProfesor = scanner.nextLine();
+                administradorDAO.asignarProfesorAAsignatura(asignatura.getIdAsignatura(), dniProfesor);
+                System.out.println("Profesor asignado correctamente.");
+            }
+
+            System.out.println("Asignatura creada correctamente.");
+        } catch (Exception e) {
+            System.out.println("Error al crear la asignatura: " + e.getMessage());
         }
     }
 

@@ -4,6 +4,7 @@ import org.example.Entity.Usuario;
 import org.example.Utils.UtilsHibernate;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import org.hibernate.query.Query;
 
 public class UsuarioDAO {
 
@@ -15,17 +16,34 @@ public class UsuarioDAO {
     }
 
     // Métod0 para crear un nuevo usuario
-    public void crearUsuario(Usuario usuario) {
-        Transaction transaction = null;
-        try (Session session = UtilsHibernate.getSessionFactory().openSession()) {
-            transaction = session.beginTransaction();
+    public void crearUsuario(Session session, Usuario usuario) {
+        //Transaction transaction = null;
+        //try (Session session = UtilsHibernate.getSessionFactory().openSession()) {
+            //transaction = session.beginTransaction();
             session.persist(usuario);
-            transaction.commit();
-        } catch (Exception e) {
-            if (transaction != null) {
-                transaction.rollback();
-            }
-            throw new RuntimeException(e);
+            //transaction.commit();
+        //} catch (Exception e) {
+            //if (transaction != null) {
+                //transaction.rollback();
+            //}
+            //throw new RuntimeException(e);
+        //}
+    }
+
+//    public void crearUsuario(Usuario usuario) {
+//        try (Session session = UtilsHibernate.getSessionFactory().openSession()) {
+//            session.beginTransaction();
+//            session.persist(usuario);
+//            session.getTransaction().commit();
+//        }
+//    }
+
+    public Usuario verificarCredenciales(String dni, String password) {
+        try (Session session = UtilsHibernate.getSessionFactory().openSession()) {
+            Query<Usuario> query = session.createQuery("FROM Usuario WHERE dni = :dni AND password = :password", Usuario.class);
+            query.setParameter("dni", dni);
+            query.setParameter("password", password);
+            return query.uniqueResult();
         }
     }
 
