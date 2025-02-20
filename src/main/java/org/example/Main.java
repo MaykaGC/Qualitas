@@ -1,6 +1,11 @@
 package org.example;
 import org.example.DAO.*;
 import org.example.Entity.*;
+import org.hibernate.engine.jdbc.CharacterStream;
+
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -21,7 +26,7 @@ public class Main {
     private static String usuarioLogeado;
     private static String rolUsuario;
 
-    public static void main(String[] args) throws ParseException {
+    public static void main(String[] args) throws ParseException, NoSuchAlgorithmException {
         int opcion;
         do {
             //Se muestra el inicio de sesión
@@ -59,11 +64,20 @@ public class Main {
                 """);
     }
 
-    public static void iniciarSesion() {
+    public static void iniciarSesion() throws NoSuchAlgorithmException {
         System.out.print("Introduce tu DNI: ");
         String dni = scanner.nextLine();
         System.out.print("Introduce tu contraseña: ");
         String password = scanner.nextLine();
+
+        String hash = encriptarContrasenia(password);
+        boolean esCorrecta = verificarContrasena(hash, password);
+
+        if(esCorrecta){
+            System.out.println("Contraseña correcta. ");
+        }else {
+            System.out.println("Contraseña incorrecta. ");
+        }
 
         Usuario usuario = usuarioDAO.verificarCredenciales(dni, password);
         if (usuario != null) {
@@ -90,7 +104,7 @@ public class Main {
         }
     }
 
-    public static void crearCuenta() throws ParseException {
+    public static void crearCuenta() throws ParseException, NoSuchAlgorithmException {
         System.out.print("""
                 -----------------------
                 ==== Nuevo usuario ====
@@ -102,8 +116,19 @@ public class Main {
         String nombre = scanner.nextLine();
         System.out.print("Introduce tu correo electrónico: ");
         String correoElectronico = scanner.nextLine();
-        System.out.print("Introduce tu contraseña: ");
-        String contrasena = scanner.nextLine();
+
+        System.out.print("Introduce una contraseña correcta que contenga al menos 5 caracteres: ");
+        String cont = scanner.nextLine();
+
+        String contrasena = "";
+        //se encripta la contraseña llamando al métod0 encargado de realizarlo
+        if (cont.length() == 5){
+            System.out.println("Tu contraseña es segura.");
+            contrasena = encriptarContrasenia(cont);
+        }else {
+            System.out.println("Tu contraseña no es segura. ");
+        }
+
         System.out.print("Introduce tu fecha de nacimiento (dd/MM/yyyy): ");
         String fechaNacimiento = scanner.nextLine();
         Date miDate = new SimpleDateFormat("dd/MM/yyyy").parse(fechaNacimiento);
@@ -132,8 +157,9 @@ public class Main {
                 alumno.setDireccionAlumno(direccion);
                 alumno.setTelefonoAlumno(telefono);
 
-                // Crear también el usuario para el alumno
+                //Crear también el usuario para el alumno
                 Usuario usuarioAlumno = new Usuario(dni, contrasena, Usuario.Rol.Alumno);
+
                 try {
                     alumnoDAO.crearAlumno(alumno, usuarioAlumno, dniTutor);
                 } catch (RuntimeException e) {
@@ -189,6 +215,32 @@ public class Main {
                 System.out.println("Rol no válido. Intente nuevamente.");
         }
     }
+
+
+
+    //Métod0 para encriptar
+    public static String encriptarContrasenia(String contrasenia) throws NoSuchAlgorithmException {
+
+        MessageDigest algoritmo = MessageDigest.getInstance("SHA-256");
+        algoritmo.update(contrasenia.getBytes(StandardCharsets.UTF_8));
+        byte [] hash = algoritmo.digest();
+
+        //Conversion a hexadecimal
+        StringBuilder factory = new StringBuilder();
+        for (int i = 0; i < hash.length; i++) {
+            factory.append(String.format("%02X", hash[i]));
+        }
+
+        return factory.toString();
+    }
+
+    // Métod0 para verificar si una contraseña coincide con el hash almacenado
+    public static boolean verificarContrasena(String contrasenaIngresada, String hashAlmacenado) throws NoSuchAlgorithmException {
+        String hashIngresado = encriptarContrasenia(contrasenaIngresada);
+        return hashIngresado.equals(hashAlmacenado);
+    }
+
+
 
     //Menú de Alumno
     public static void menuAlumno() {
