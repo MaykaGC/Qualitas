@@ -3,6 +3,7 @@ package org.example;
 import org.example.DAO.*;
 import org.example.Entity.*;
 
+import java.security.MessageDigest;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -40,22 +41,22 @@ public class Main {
                     System.out.println("Saliendo de la aplicación...");
                     break;
                 default:
-                    System.out.println("Opción no válida, por favor intente de nuevo.");
+                    System.out.println("Opción no válida. Intente nuevamente.");
             }
         } while (opcion != 0);
     }
 
     public static void mostrarMenuInicioSesion() {
         System.out.println("""
-                ------------------------
-                === Inicio de sesión ===
-                ------------------------
+                --------------------------------
+                === Qualitas Escuela Familia ===
+                --------------------------------
                 1. Iniciar sesión
                 2. Crear cuenta
                 0. Salir
-                ------------------------
-                ========================
-                ------------------------
+                --------------------------------
+                ================================
+                --------------------------------
                 """);
     }
 
@@ -97,90 +98,43 @@ public class Main {
                 -----------------------
                 """);
         System.out.print("Introduce tu DNI: ");
-        String dni = scanner.nextLine();
+        String dni = scanner.nextLine().trim();
         System.out.print("Introduce tu nombre: ");
-        String nombre = scanner.nextLine();
+        String nombre = scanner.nextLine().trim();
         System.out.print("Introduce tu correo electrónico: ");
-        String correoElectronico = scanner.nextLine();
+        String correoElectronico = scanner.nextLine().trim();
         System.out.print("Introduce tu contraseña: ");
-        String contrasena = scanner.nextLine();
+        String contrasena = scanner.nextLine().trim();
         System.out.print("Introduce tu fecha de nacimiento (dd/MM/yyyy): ");
-        String fechaNacimiento = scanner.nextLine();
+        String fechaNacimiento = scanner.nextLine().trim();
         Date miDate = new SimpleDateFormat("dd/MM/yyyy").parse(fechaNacimiento);
         System.out.print("Introduce tu dirección: ");
-        String direccion = scanner.nextLine();
+        String direccion = scanner.nextLine().trim();
         System.out.print("Introduce tu número de teléfono: ");
-        String telefono = scanner.nextLine();
-        System.out.print("Introduce tu rol (Alumno/Profesor/Tutor): ");
-        String rol = scanner.nextLine().toLowerCase().trim();
+        String telefono = scanner.nextLine().trim();
+        System.out.print("Introduce el código de vinculación): ");
+        String codVinculacion = scanner.nextLine().toLowerCase().trim();
         System.out.print("""
                 -----------------------
                 =======================
                 -----------------------
                 """);
 
+        char rol = codVinculacion.charAt(0);
         switch (rol) {
-            case "alumno":
-                System.out.print("Introduce el DNI del tutor: ");
-                String dniTutor = scanner.nextLine();
-
-                Alumno alumno = new Alumno();
-                alumno.setDniAlumno(dni);
-                alumno.setNombreAlumno(nombre);
-                alumno.setEmailAlumno(correoElectronico);
-                alumno.setFechaNacimientoAlumno(miDate);
-                alumno.setDireccionAlumno(direccion);
-                alumno.setTelefonoAlumno(telefono);
-
-                // Crear también el usuario para el alumno
-                Usuario usuarioAlumno = new Usuario(dni, contrasena, Usuario.Rol.Alumno);
-                try {
-                    alumnoDAO.crearAlumno(alumno, usuarioAlumno, dniTutor);
-                } catch (RuntimeException e) {
-                    System.out.println("No se pudo crear el alumno: " + e.getMessage());
-                    return;
-                }
+            case '1':
+                crearAlumno(dni, nombre, correoElectronico, contrasena, miDate, direccion, telefono);
                 break;
 
-            case "profesor":
-                Profesor profesor = new Profesor();
-                profesor.setDniProfesor(dni);
-                profesor.setNombreProfesor(nombre);
-                profesor.setEmailProfesor(correoElectronico);
-                profesor.setFechaNacimientoProfesor(miDate);
-                profesor.setDireccionProfesor(direccion);
-                profesor.setTelefonoProfesor(telefono);
-
-                // Crear también el usuario para el profesor
-                Usuario usuarioProfesor = new Usuario(dni, contrasena, Usuario.Rol.Profesor);
-                profesorDAO.crearProfesor(profesor, usuarioProfesor);
+            case '2':
+                crearProfesor(dni, nombre, correoElectronico, contrasena, miDate, direccion, telefono);
                 break;
 
-            case "tutor":
-                Tutor tutor = new Tutor();
-                tutor.setDniTutor(dni);
-                tutor.setNombreTutor(nombre);
-                tutor.setEmailTutor(correoElectronico);
-                tutor.setFechaNacimientoTutor(miDate);
-                tutor.setDireccionTutor(direccion);
-                tutor.setTelefonoTutor(telefono);
-
-                // Crear también el usuario para el tutor
-                Usuario usuarioTutor = new Usuario(dni, contrasena, Usuario.Rol.Tutor);
-                tutorDAO.crearTutor(tutor, usuarioTutor);
+            case '3':
+                crearTutor(dni, nombre, correoElectronico, contrasena, miDate, direccion, telefono);
                 break;
-            case "administrador":
-                Administrador administrador = new Administrador();
-                administrador.setDniAdministrador(dni);
-                administrador.setNombreAdministrador(nombre);
-                administrador.setEmailAdministrador(correoElectronico);
-                administrador.setFechaNacimientoAdministrador(miDate);
-                administrador.setDireccionAdministrador(direccion);
-                administrador.setTelefonoAdministrador(telefono);
-
-                // Crear también el usuario para el administrador
-                Usuario usuarioAdministrador = new Usuario(dni, contrasena, Usuario.Rol.Administrador);
-                administradorDAO.crearAdministrador(administrador, usuarioAdministrador);
+            case '4':
+                crearAdministrador(dni, nombre, correoElectronico, contrasena, miDate, direccion, telefono);
                 break;
 
             default:
@@ -188,7 +142,97 @@ public class Main {
         }
     }
 
-    // Menú de Alumno
+    public static void crearAlumno(String dni, String nombre, String correoElectronico, String contrasena, Date miDate, String direccion, String telefono) {
+        System.out.print("Introduce el DNI del tutor: ");
+        String dniTutor = scanner.nextLine();
+
+        Alumno alumno = new Alumno();
+        alumno.setDniAlumno(dni);
+        alumno.setNombreAlumno(nombre);
+        alumno.setEmailAlumno(correoElectronico);
+        alumno.setFechaNacimientoAlumno(miDate);
+        alumno.setDireccionAlumno(direccion);
+        alumno.setTelefonoAlumno(telefono);
+
+        // Crear también el usuario para el alumno
+        Usuario usuarioAlumno = new Usuario(dni, contrasena, Usuario.Rol.Alumno);
+        try {
+            alumnoDAO.crearAlumno(alumno, usuarioAlumno, dniTutor);
+        } catch (RuntimeException e) {
+            if (e.getMessage().contains("Duplicate entry")) {
+                System.out.println("El alumno ya existe en la base de datos.");
+            } else
+                System.out.println("No se pudo crear el alumno: " + e.getMessage());
+            return;
+        }
+    }
+
+    public static void crearProfesor(String dni, String nombre, String correoElectronico, String contrasena, Date miDate, String direccion, String telefono) {
+        Profesor profesor = new Profesor();
+        profesor.setDniProfesor(dni);
+        profesor.setNombreProfesor(nombre);
+        profesor.setEmailProfesor(correoElectronico);
+        profesor.setFechaNacimientoProfesor(miDate);
+        profesor.setDireccionProfesor(direccion);
+        profesor.setTelefonoProfesor(telefono);
+
+        // Crear también el usuario para el profesor
+        Usuario usuarioProfesor = new Usuario(dni, contrasena, Usuario.Rol.Profesor);
+        try {
+            profesorDAO.crearProfesor(profesor, usuarioProfesor);
+        } catch (RuntimeException e) {
+            if (e.getMessage().contains("Duplicate entry")) {
+                System.out.println("El profesor ya existe en la base de datos.");
+            } else
+                System.out.println("No se pudo crear el profesor: " + e.getMessage());
+            return;
+        }
+    }
+
+    public static void crearTutor(String dni, String nombre, String correoElectronico, String contrasena, Date miDate, String direccion, String telefono) {
+        Tutor tutor = new Tutor();
+        tutor.setDniTutor(dni);
+        tutor.setNombreTutor(nombre);
+        tutor.setEmailTutor(correoElectronico);
+        tutor.setFechaNacimientoTutor(miDate);
+        tutor.setDireccionTutor(direccion);
+        tutor.setTelefonoTutor(telefono);
+
+        // Crear también el usuario para el tutor
+        Usuario usuarioTutor = new Usuario(dni, contrasena, Usuario.Rol.Tutor);
+        try {
+            tutorDAO.crearTutor(tutor, usuarioTutor);
+        } catch (RuntimeException e) {
+            if (e.getMessage().contains("Duplicate entry")) {
+                System.out.println("El tutor ya existe en la base de datos.");
+            } else
+                System.out.println("No se pudo crear el tutor: " + e.getMessage());
+            return;
+        }
+    }
+
+    public static void crearAdministrador(String dni, String nombre, String correoElectronico, String contrasena, Date miDate, String direccion, String telefono) {
+        Administrador administrador = new Administrador();
+        administrador.setDniAdministrador(dni);
+        administrador.setNombreAdministrador(nombre);
+        administrador.setEmailAdministrador(correoElectronico);
+        administrador.setFechaNacimientoAdministrador(miDate);
+        administrador.setDireccionAdministrador(direccion);
+        administrador.setTelefonoAdministrador(telefono);
+
+        // Crear también el usuario para el administrador
+        Usuario usuarioAdministrador = new Usuario(dni, contrasena, Usuario.Rol.Administrador);
+        try {
+            administradorDAO.crearAdministrador(administrador, usuarioAdministrador);
+        } catch (RuntimeException e) {
+            if (e.getMessage().contains("Duplicate entry")) {
+                System.out.println("El administrador ya existe en la base de datos.");
+            } else
+                System.out.println("No se pudo crear el administrador: " + e.getMessage());
+            return;
+        }
+    }
+
     public static void menuAlumno() {
         int opcion;
         do {
