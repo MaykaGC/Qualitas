@@ -15,7 +15,7 @@ public class ProfesorDAO {
         this.usuarioDAO = new UsuarioDAO(); // Inicializamos el DAO de Usuario
     }
 
-    // Método para obtener un profesor por su DNI
+    // Métod0 para obtener un profesor por su DNI
     public Profesor obtenerProfesorPorDni(Profesor profesor) {
         Transaction transaction = null;
         Profesor result = null;

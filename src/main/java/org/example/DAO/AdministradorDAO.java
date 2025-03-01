@@ -34,74 +34,83 @@ public class AdministradorDAO {
         }
     }
 
-    public void asignarAsignaturaProfesor(int idAsignatura, String dniProfesor) {
+    public Asignatura asignarAsignaturaProfesor(int idAsignatura, String dniProfesor) {
         Transaction transaction = null;
         try (Session session = UtilsHibernate.getSessionFactory().openSession()) {
             transaction = session.beginTransaction();
             Profesor profesor = session.get(Profesor.class, dniProfesor);
             Asignatura asignatura = session.get(Asignatura.class, idAsignatura);
-            if (profesor != null && asignatura != null) {
-                profesor.getAsignaturas().add(asignatura);
-                asignatura.setProfesor(profesor);
-                session.update(profesor);
-                session.update(asignatura);
+
+            if (profesor == null || asignatura == null) {
+                transaction.rollback();
+                return null;
             }
+
+            profesor.getAsignaturas().add(asignatura);
+            asignatura.setProfesor(profesor);
+            // Se hace merge de los objetos para que se actualicen en la base de datos, de todas formas no es necesario porque Hibernate detecta los cambios automáticamente al hacer commit()
+            session.merge(profesor);
+            session.merge(asignatura);
+
             transaction.commit();
+            return asignatura;
         } catch (Exception e) {
             if (transaction != null) transaction.rollback();
             throw new RuntimeException(e);
         }
     }
 
-    // Método para asignar un profesor a una asignatura
-    public void asignarProfesorAAsignatura(int idAsignatura, String dniProfesor) {
+    public Matricula matricularAlumnoEnAsignatura(String dniAlumno, int idAsignatura) {
         Transaction transaction = null;
-        try (Session session = UtilsHibernate.getSessionFactory().openSession()) {
-            transaction = session.beginTransaction();
-            Profesor profesor = session.get(Profesor.class, dniProfesor);
-            Asignatura asignatura = session.get(Asignatura.class, idAsignatura);
-            if (profesor != null && asignatura != null) {
-                asignatura.setProfesor(profesor);
-                session.update(asignatura);
-            }
-            transaction.commit();
-        } catch (Exception e) {
-            if (transaction != null) transaction.rollback();
-            throw new RuntimeException(e);
-        }
-    }
+        Matricula matricula = null;
 
-    public void matricularAlumnoEnAsignatura(String dniAlumno, int idAsignatura) {
-        Transaction transaction = null;
         try (Session session = UtilsHibernate.getSessionFactory().openSession()) {
             transaction = session.beginTransaction();
             Alumno alumno = session.get(Alumno.class, dniAlumno);
             Asignatura asignatura = session.get(Asignatura.class, idAsignatura);
+
             if (alumno != null && asignatura != null) {
-                Matricula matricula = new Matricula();
+                matricula = new Matricula();
                 matricula.setAlumno(alumno);
                 matricula.setAsignatura(asignatura);
                 session.persist(matricula);
+                transaction.commit();
+            } else {
+                transaction.rollback();
+                return null;
             }
-            transaction.commit();
         } catch (Exception e) {
+            if (transaction != null) transaction.rollback();
+            throw new RuntimeException(e);
+        }
+
+        return matricula;
+    }
+
+    public void crearAsignaturaConProfesor(Asignatura asignatura, String dniProfesor) {
+        Transaction transaction = null;
+        try (Session session = UtilsHibernate.getSessionFactory().openSession()) {
+            transaction = session.beginTransaction();
+            session.persist(asignatura);
+
+            if (dniProfesor != null && !dniProfesor.isEmpty()) {
+                Profesor profesor = session.get(Profesor.class, dniProfesor);
+                if (profesor == null) {
+                    System.out.println("El profesor con DNI " + dniProfesor + " no existe.\nPuedes asignarlo después desde el menú.");
+                    System.out.println("✅ Asignatura creada correctamente.");
+                    return;
+                }
+                asignatura.setProfesor(profesor);
+                session.merge(asignatura);
+            }
+
+            transaction.commit();
+            System.out.println("✅ Asignatura creada correctamente.");
+        } catch (Exception e) {
+            System.out.println("❌ Error al crear la asignatura: " + e.getMessage());
             if (transaction != null) transaction.rollback();
             throw new RuntimeException(e);
         }
     }
 
-    public void crearAsignatura(Asignatura asignatura) {
-        Transaction transaction = null;
-        try (Session session = UtilsHibernate.getSessionFactory().openSession()) {
-            transaction = session.beginTransaction();
-            session.persist(asignatura);
-            transaction.commit();
-
-        } catch (Exception e) {
-            if (transaction != null) {
-                transaction.rollback();
-            }
-            throw new RuntimeException(e);
-        }
-    }
 }

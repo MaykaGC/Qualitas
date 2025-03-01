@@ -1,0 +1,74 @@
+DROP DATABASE IF EXISTS Qualitas;
+CREATE DATABASE Qualitas;
+USE Qualitas;
+
+-- Tabla USUARIOS para autenticación y roles
+CREATE TABLE Usuarios (
+    DNI CHAR(9) PRIMARY KEY,
+    Password VARCHAR(255) NOT NULL,
+    Rol ENUM('Alumno', 'Tutor', 'Profesor', 'Administrador') NOT NULL
+);
+
+-- Tabla TUTOR
+CREATE TABLE Tutor (
+    DNI_Tutor CHAR(9) PRIMARY KEY,
+    Nombre_Tutor VARCHAR(100) NOT NULL,
+    Email_Tutor VARCHAR(100),
+    FechaNacimiento_Tutor DATE,
+    Direccion_Tutor VARCHAR(200),
+    Telefono_Tutor VARCHAR(15),
+    FOREIGN KEY (DNI_Tutor) REFERENCES Usuarios(DNI) -- Relación con Usuarios
+);
+
+-- Tabla ALUMNO
+CREATE TABLE Alumno (
+    DNI_Alumno CHAR(9) PRIMARY KEY,
+    Nombre_Alumno VARCHAR(100) NOT NULL,
+    Email_Alumno VARCHAR(100),
+    FechaNacimiento_Alumno DATE,
+    Direccion_Alumno VARCHAR(200),
+    Telefono_Alumno VARCHAR(15),
+    TutorLegal CHAR(9),
+    FOREIGN KEY (TutorLegal) REFERENCES Tutor(DNI_Tutor),
+    FOREIGN KEY (DNI_Alumno) REFERENCES Usuarios(DNI) -- Relación con Usuarios
+);
+
+-- Tabla PROFESOR
+CREATE TABLE Profesor (
+    DNI_Profesor CHAR(9) PRIMARY KEY,
+    Nombre_Profesor VARCHAR(100) NOT NULL,
+    Email_Profesor VARCHAR(100),
+    FechaNacimiento_Profesor DATE,
+    Direccion_Profesor VARCHAR(200),
+    Telefono_Profesor VARCHAR(15),
+    FOREIGN KEY (DNI_Profesor) REFERENCES Usuarios(DNI) -- Relación con Usuarios
+);
+
+-- Tabla ASIGNATURA
+CREATE TABLE Asignatura (
+    IdAsignatura INT AUTO_INCREMENT PRIMARY KEY,
+    Nombre_Asignatura VARCHAR(100) NOT NULL,
+    Curso VARCHAR(50),
+    Profesor CHAR(9),
+    FOREIGN KEY (Profesor) REFERENCES Profesor(DNI_Profesor)
+);
+
+-- Tabla MATRÍCULA
+CREATE TABLE Matricula (
+    IdMatricula INT AUTO_INCREMENT PRIMARY KEY,
+    IdAlumno CHAR(9),
+    IdAsignatura INT,
+    Nota DECIMAL(4, 2) NOT NULL,
+    FOREIGN KEY (IdAlumno) REFERENCES Alumno(DNI_Alumno),
+    FOREIGN KEY (IdAsignatura) REFERENCES Asignatura(IdAsignatura)
+);
+-- Tabla ADMINISTRADOR
+CREATE TABLE Administrador (
+    DNI_Administrador CHAR(9) PRIMARY KEY,
+    Nombre_Administrador VARCHAR(100) NOT NULL,
+    Email_Administrador VARCHAR(100),
+    FechaNacimiento_Administrador DATE,
+    Direccion_Administrador VARCHAR(200),
+    Telefono_Administrador VARCHAR(15),
+    FOREIGN KEY (DNI_Administrador) REFERENCES Usuarios(DNI) -- Relación con Usuarios
+);
