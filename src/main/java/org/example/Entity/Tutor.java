@@ -3,6 +3,7 @@ package org.example.Entity;
 import jakarta.persistence.*;
 
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Table(name = "Tutor")
@@ -31,7 +32,21 @@ public class Tutor {
     @JoinColumn(name = "DNI_Tutor", referencedColumnName = "DNI")
     private Usuario usuario;
 
+    @OneToMany(mappedBy = "tutor", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<Alumno> alumnos;
+
     public Tutor() {
+    }
+
+    public Tutor(String dniTutor, String nombreTutor, String emailTutor, Date fechaNacimientoTutor, String direccionTutor, String telefonoTutor, Usuario usuario, List<Alumno> alumnos) {
+        this.dniTutor = dniTutor;
+        this.nombreTutor = nombreTutor;
+        this.emailTutor = emailTutor;
+        this.fechaNacimientoTutor = fechaNacimientoTutor;
+        this.direccionTutor = direccionTutor;
+        this.telefonoTutor = telefonoTutor;
+        this.usuario = usuario;
+        this.alumnos = alumnos;
     }
 
     public Tutor(String dniTutor, String nombreTutor, String emailTutor, Date fechaNacimientoTutor, String direccionTutor, String telefonoTutor, Usuario usuario) {
@@ -98,5 +113,13 @@ public class Tutor {
 
     public void setUsuario(Usuario usuario) {
         this.usuario = usuario;
+    }
+
+    public List<Alumno> getAlumnos() {
+        return alumnos;
+    }
+
+    public void setAlumnos(List<Alumno> alumnos) {
+        this.alumnos = alumnos;
     }
 }

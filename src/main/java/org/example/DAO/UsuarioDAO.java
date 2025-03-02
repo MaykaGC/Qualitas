@@ -2,6 +2,7 @@ package org.example.DAO;
 
 import org.example.Entity.Usuario;
 import org.example.Utils.UtilsHibernate;
+import org.example.Utils.UtilsPassword;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.query.Query;
@@ -38,12 +39,22 @@ public class UsuarioDAO {
 //        }
 //    }
 
-    public Usuario verificarCredenciales(String dni, String password) {
+    public Usuario verificarCredenciales(String dni, String passwordIngresada) {
         try (Session session = UtilsHibernate.getSessionFactory().openSession()) {
-            Query<Usuario> query = session.createQuery("FROM Usuario WHERE dni = :dni AND password = :password", Usuario.class);
-            query.setParameter("dni", dni);
-            query.setParameter("password", password);
-            return query.uniqueResult();
+            Usuario usuario = session.createQuery("FROM Usuario WHERE dni = :dni", Usuario.class)
+                    .setParameter("dni", dni)
+                    .uniqueResult();
+
+            if (usuario == null) {
+                return null;
+            }
+
+            // Verifica la contraseña ingresada con la almacenada
+            if (UtilsPassword.checkPassword(passwordIngresada, usuario.getPassword())) {
+                return usuario; // Contraseña válida, retorna el usuario
+            } else {
+                return null; // Contraseña incorrecta
+            }
         }
     }
 

@@ -3,6 +3,8 @@ package org.example.Service;
 import org.example.DAO.*;
 import org.example.Entity.Usuario;
 import org.example.Menu.*;
+import org.example.Utils.UtilsPassword;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -25,7 +27,7 @@ public class UsuarioService {
                 case "Alumno" -> new MenuAlumno(dni).mostrarMenu();
                 case "Profesor" -> new MenuProfesor(dni).mostrarMenu();
                 case "Tutor" -> new MenuTutor(dni).mostrarMenu();
-                case "Administrador" -> new MenuAdministrador(dni).mostrarMenu();
+                case "Administrador" -> new MenuAdministrador().mostrarMenu();
                 default -> System.out.println("Rol inválido. Intente nuevamente.");
             }
         } else {
@@ -42,6 +44,7 @@ public class UsuarioService {
         String correoElectronico = scanner.nextLine().trim();
         System.out.print("Introduce tu contraseña: ");
         String contrasena = scanner.nextLine().trim();
+        String contrasenaEncriptada = UtilsPassword.hashPassword(contrasena);
         System.out.print("Introduce tu fecha de nacimiento (dd/MM/yyyy): ");
         String fechaNacimiento = scanner.nextLine().trim();
         Date fecha = new SimpleDateFormat("dd/MM/yyyy").parse(fechaNacimiento);
@@ -54,10 +57,10 @@ public class UsuarioService {
 
         char rol = codVinculacion.charAt(0);
         switch (rol) {
-            case '1' -> new AlumnoService().crearAlumno(dni, nombre, correoElectronico, contrasena, fecha, direccion, telefono);
-            case '2' -> new ProfesorService().crearProfesor(dni, nombre, correoElectronico, contrasena, fecha, direccion, telefono);
-            case '3' -> new TutorService().crearTutor(dni, nombre, correoElectronico, contrasena, fecha, direccion, telefono);
-            case '4' -> new AdministradorService().crearAdministrador(dni, nombre, correoElectronico, contrasena, fecha, direccion, telefono);
+            case '1' -> new AlumnoService("").crearAlumno(dni, nombre, correoElectronico, contrasenaEncriptada, fecha, direccion, telefono);
+            case '2' -> new ProfesorService("").crearProfesor(dni, nombre, correoElectronico, contrasenaEncriptada, fecha, direccion, telefono);
+            case '3' -> new TutorService().crearTutor(dni, nombre, correoElectronico, contrasenaEncriptada, fecha, direccion, telefono);
+            case '4' -> new AdministradorService().crearAdministrador(dni, nombre, correoElectronico, contrasenaEncriptada, fecha, direccion, telefono);
             default -> System.out.println("Rol no válido. Intente nuevamente.");
         }
     }

@@ -1,6 +1,7 @@
 package org.example.Entity;
 
 import jakarta.persistence.*;
+
 import java.util.Date;
 import java.util.List;
 
@@ -39,7 +40,8 @@ public class Alumno {
     @OneToMany(mappedBy = "alumno", fetch = FetchType.LAZY)
     private List<Matricula> matriculas;
 
-    public Alumno() {}
+    public Alumno() {
+    }
 
     public Alumno(String dniAlumno, String nombreAlumno, String emailAlumno, Date fechaNacimientoAlumno, String direccionAlumno, String telefonoAlumno, Tutor tutor, Usuario usuario, List<Matricula> matriculas) {
         this.dniAlumno = dniAlumno;
@@ -125,5 +127,12 @@ public class Alumno {
 
     public void setMatriculas(List<Matricula> matriculas) {
         this.matriculas = matriculas;
+    }
+
+
+    @Override
+    public String toString() {
+        return "Alumno: " + "dni: " + getDniAlumno() +
+                ", nombre: " + getNombreAlumno();
     }
 }

@@ -17,7 +17,7 @@ CREATE TABLE Tutor (
     FechaNacimiento_Tutor DATE,
     Direccion_Tutor VARCHAR(200),
     Telefono_Tutor VARCHAR(15),
-    FOREIGN KEY (DNI_Tutor) REFERENCES Usuarios(DNI) -- Relación con Usuarios
+    FOREIGN KEY (DNI_Tutor) REFERENCES Usuarios(DNI) ON DELETE CASCADE
 );
 
 -- Tabla ALUMNO
@@ -29,8 +29,8 @@ CREATE TABLE Alumno (
     Direccion_Alumno VARCHAR(200),
     Telefono_Alumno VARCHAR(15),
     TutorLegal CHAR(9),
-    FOREIGN KEY (TutorLegal) REFERENCES Tutor(DNI_Tutor),
-    FOREIGN KEY (DNI_Alumno) REFERENCES Usuarios(DNI) -- Relación con Usuarios
+    FOREIGN KEY (TutorLegal) REFERENCES Tutor(DNI_Tutor) ON DELETE SET NULL,
+    FOREIGN KEY (DNI_Alumno) REFERENCES Usuarios(DNI) ON DELETE CASCADE
 );
 
 -- Tabla PROFESOR
@@ -41,7 +41,7 @@ CREATE TABLE Profesor (
     FechaNacimiento_Profesor DATE,
     Direccion_Profesor VARCHAR(200),
     Telefono_Profesor VARCHAR(15),
-    FOREIGN KEY (DNI_Profesor) REFERENCES Usuarios(DNI) -- Relación con Usuarios
+    FOREIGN KEY (DNI_Profesor) REFERENCES Usuarios(DNI) ON DELETE CASCADE
 );
 
 -- Tabla ASIGNATURA
@@ -50,7 +50,7 @@ CREATE TABLE Asignatura (
     Nombre_Asignatura VARCHAR(100) NOT NULL,
     Curso VARCHAR(50),
     Profesor CHAR(9),
-    FOREIGN KEY (Profesor) REFERENCES Profesor(DNI_Profesor)
+    FOREIGN KEY (Profesor) REFERENCES Profesor(DNI_Profesor) ON DELETE SET NULL
 );
 
 -- Tabla MATRÍCULA
@@ -58,9 +58,9 @@ CREATE TABLE Matricula (
     IdMatricula INT AUTO_INCREMENT PRIMARY KEY,
     IdAlumno CHAR(9),
     IdAsignatura INT,
-    Nota DECIMAL(4, 2) NOT NULL,
-    FOREIGN KEY (IdAlumno) REFERENCES Alumno(DNI_Alumno),
-    FOREIGN KEY (IdAsignatura) REFERENCES Asignatura(IdAsignatura)
+    Nota DECIMAL(4, 2),
+    FOREIGN KEY (IdAlumno) REFERENCES Alumno(DNI_Alumno) ON DELETE CASCADE,
+    FOREIGN KEY (IdAsignatura) REFERENCES Asignatura(IdAsignatura) ON DELETE CASCADE
 );
 -- Tabla ADMINISTRADOR
 CREATE TABLE Administrador (
@@ -70,5 +70,5 @@ CREATE TABLE Administrador (
     FechaNacimiento_Administrador DATE,
     Direccion_Administrador VARCHAR(200),
     Telefono_Administrador VARCHAR(15),
-    FOREIGN KEY (DNI_Administrador) REFERENCES Usuarios(DNI) -- Relación con Usuarios
+    FOREIGN KEY (DNI_Administrador) REFERENCES Usuarios(DNI) ON DELETE CASCADE
 );

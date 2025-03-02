@@ -1,10 +1,12 @@
 package org.example.Service;
 
 import org.example.DAO.TutorDAO;
+import org.example.Entity.Alumno;
 import org.example.Entity.Tutor;
 import org.example.Entity.Usuario;
-
+import org.example.Utils.UtilsPassword;
 import java.util.Date;
+import java.util.List;
 
 public class TutorService {
     private static final TutorDAO tutorDAO = new TutorDAO();
@@ -18,7 +20,6 @@ public class TutorService {
         tutor.setDireccionTutor(direccion);
         tutor.setTelefonoTutor(telefono);
 
-        // Crear también el usuario para el tutor
         Usuario usuarioTutor = new Usuario(dni, contrasena, Usuario.Rol.Tutor);
         try {
             tutorDAO.crearTutor(tutor, usuarioTutor);
@@ -27,6 +28,18 @@ public class TutorService {
                 System.out.println("El tutor ya existe en la base de datos.");
             } else
                 System.out.println("No se pudo crear el tutor: " + e.getMessage());
+        }
+    }
+
+    public void obtenerAlumnosTutor(String dniTutor) {
+        List<Alumno> alumnos = tutorDAO.obtenerAlumnosTutor(dniTutor);
+        if (alumnos.isEmpty()) {
+            System.out.println("No tienes alumnos asignados.");
+        } else {
+            System.out.println("Alumnos asignados a " + dniTutor + ":");
+            for (Alumno alumno : alumnos) {
+                System.out.println(alumno);
+            }
         }
     }
 }

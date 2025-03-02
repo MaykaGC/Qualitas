@@ -1,10 +1,13 @@
 package org.example.DAO;
 
+import org.example.Entity.Alumno;
 import org.example.Entity.Tutor;
 import org.example.Entity.Usuario;
 import org.example.Utils.UtilsHibernate;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+
+import java.util.List;
 
 public class TutorDAO {
 
@@ -82,6 +85,25 @@ public class TutorDAO {
                 transaction.rollback();
             }
             throw new RuntimeException(e);
+        }
+    }
+
+    // Métod0 para obtener los alumnos asignados a un tutor
+    public List<Alumno> obtenerAlumnosTutor(String dniTutor) {
+        try (Session session = UtilsHibernate.getSessionFactory().openSession()) {
+            // Obtener el tutor y sus alumnos en una sola consulta
+            Tutor tutor = session.createQuery(
+                            "SELECT t FROM Tutor t LEFT JOIN FETCH t.alumnos WHERE t.dniTutor = :dni", Tutor.class)
+                    .setParameter("dni", dniTutor)
+                    .uniqueResult();
+
+            if (tutor != null) {
+                return tutor.getAlumnos();
+            }
+            return List.of(); // Retorna lista vacía si no se encuentra el tutor
+        } catch (Exception e) {
+            System.out.println("Error al obtener los alumnos del tutor: " + e.getMessage());
+            return List.of();
         }
     }
 }
