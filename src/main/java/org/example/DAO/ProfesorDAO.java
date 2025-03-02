@@ -72,37 +72,4 @@ public class ProfesorDAO {
             throw new RuntimeException(e);
         }
     }
-
-    // Método para actualizar los datos de un profesor
-    public void actualizarProfesor(Profesor profesor) {
-        Transaction transaction = null;
-        try (Session session = UtilsHibernate.getSessionFactory().openSession()) {
-            transaction = session.beginTransaction();
-            session.update(profesor);
-            transaction.commit();
-        } catch (Exception e) {
-            if (transaction != null) {
-                transaction.rollback();
-            }
-            throw new RuntimeException(e);
-        }
-    }
-
-    // Método para eliminar un profesor
-    public void eliminarProfesor(String dni) {
-        Transaction transaction = null;
-        try (Session session = UtilsHibernate.getSessionFactory().openSession()) {
-            transaction = session.beginTransaction();
-            Profesor profesor = session.get(Profesor.class, dni);
-            if (profesor != null) {
-                session.delete(profesor);
-            }
-            transaction.commit();
-        } catch (Exception e) {
-            if (transaction != null) {
-                transaction.rollback();
-            }
-            throw new RuntimeException(e);
-        }
-    }
 }

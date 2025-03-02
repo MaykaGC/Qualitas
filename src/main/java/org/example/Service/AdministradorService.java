@@ -1,9 +1,9 @@
 package org.example.Service;
 
 import org.example.DAO.AdministradorDAO;
-import org.example.Entity.Administrador;
-import org.example.Entity.Asignatura;
-import org.example.Entity.Usuario;
+import org.example.Entity.*;
+import org.example.Utils.UtilsHibernate;
+
 import java.util.Date;
 import java.util.Scanner;
 
@@ -91,6 +91,63 @@ public class AdministradorService {
             administradorDAO.crearAsignaturaConProfesor(asignatura, dniProfesor);
         } catch (Exception e) {
             throw new RuntimeException("Error al crear la asignatura: " + e.getMessage());
+        }
+    }
+
+    public <T> void eliminarEntidad(Class<T> entidad) {
+        System.out.println("Introduce el DNI del usuario a eliminar:");
+        String dni = scanner.nextLine();
+        UtilsHibernate.eliminarPorId(entidad, dni);
+        System.out.println("✅ Usuario eliminado correctamente.");
+    }
+
+    public <T> void actualizarEntidad(Class<T> entidad, String dni, T datosActualizados) {
+        UtilsHibernate.actualizarPorDni(entidad,dni,datosActualizados);
+        System.out.println("✅ Usuario actualizado correctamente.");
+    }
+
+    public void eliminarUsuario(AdministradorService administradorService) {
+        System.out.println("¿Qué tipo de usuario deseas eliminar? (Alumno/Profesor/Tutor)");
+        String tipo = scanner.nextLine().toLowerCase();
+
+        switch (tipo) {
+            case "alumno" -> administradorService.eliminarEntidad(Alumno.class);
+            case "profesor" -> administradorService.eliminarEntidad(Profesor.class);
+            case "tutor" -> administradorService.eliminarEntidad(Tutor.class);
+            default -> System.out.println("Tipo de usuario no válido.");
+        }
+    }
+
+    public void actualizarUsuario(AdministradorService administradorService) {
+        System.out.println("¿Qué tipo de usuario deseas actualizar? (Alumno/Profesor/Tutor)");
+        String tipo = scanner.nextLine().toLowerCase();
+
+        System.out.println("Introduce el DNI del usuario a actualizar:");
+        String dni = scanner.nextLine();
+
+        switch (tipo) {
+            case "alumno" -> {
+                Alumno alumno = new Alumno();
+                alumno.setDniAlumno(dni);
+                System.out.println("Nuevo nombre: ");
+                alumno.setNombreAlumno(scanner.nextLine());
+                administradorService.actualizarEntidad(Alumno.class, dni, alumno);
+            }
+            case "profesor" -> {
+                Profesor profesor = new Profesor();
+                profesor.setDniProfesor(dni);
+                System.out.println("Nuevo nombre: ");
+                profesor.setNombreProfesor(scanner.nextLine());
+                administradorService.actualizarEntidad(Profesor.class, dni, profesor);
+            }
+            case "tutor" -> {
+                Tutor tutor = new Tutor();
+                tutor.setDniTutor(dni);
+                System.out.println("Nuevo nombre: ");
+                tutor.setNombreTutor(scanner.nextLine());
+                administradorService.actualizarEntidad(Tutor.class, dni, tutor);
+            }
+            default -> System.out.println("Tipo de usuario no válido.");
         }
     }
 }

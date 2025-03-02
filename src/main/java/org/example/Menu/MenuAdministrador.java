@@ -1,13 +1,12 @@
 package org.example.Menu;
 
-import org.example.DAO.AdministradorDAO;
 import org.example.Service.AdministradorService;
 import org.example.Service.AlumnoService;
 import org.example.Service.ProfesorService;
+
 import java.util.Scanner;
 
 public class MenuAdministrador {
-    private final AdministradorDAO administradorDAO = new AdministradorDAO();
     private static final Scanner scanner = new Scanner(System.in);
 
     public void mostrarMenu() {
@@ -22,6 +21,8 @@ public class MenuAdministrador {
                     3. Ver asignaturas de profesor
                     4. Ver horario de alumno
                     5. Crear asignatura
+                    6. Actualizar usuario
+                    7. Eliminar usuario
                     0. Cerrar sesión
                     ------------------------------------
                     ====================================
@@ -45,6 +46,8 @@ public class MenuAdministrador {
                     new AlumnoService(dniAlumno).verHorarioAlumno();
                 }
                 case "5" -> administradorService.crearAsignatura();
+                case "6" -> administradorService.actualizarUsuario(administradorService);
+                case "7" -> administradorService.eliminarUsuario(administradorService);
                 case "0" -> System.out.println("Cerrando sesión...");
                 default -> System.out.println("Opción no válida. Intente nuevamente.");
             }

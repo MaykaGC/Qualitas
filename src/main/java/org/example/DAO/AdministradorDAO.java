@@ -112,5 +112,4 @@ public class AdministradorDAO {
             throw new RuntimeException(e);
         }
     }
-
 }
