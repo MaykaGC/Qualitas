@@ -43,20 +43,6 @@ public class Alumno {
     public Alumno() {
     }
 
-    public Alumno(String dniAlumno, String nombreAlumno, String emailAlumno, Date fechaNacimientoAlumno, String direccionAlumno, String telefonoAlumno, Tutor tutor, Usuario usuario, List<Matricula> matriculas) {
-        this.dniAlumno = dniAlumno;
-        this.nombreAlumno = nombreAlumno;
-        this.emailAlumno = emailAlumno;
-        this.fechaNacimientoAlumno = fechaNacimientoAlumno;
-        this.direccionAlumno = direccionAlumno;
-        this.telefonoAlumno = telefonoAlumno;
-        this.tutor = tutor;
-        this.usuario = usuario;
-        this.matriculas = matriculas;
-    }
-
-    // Getters y Setters
-
     public String getDniAlumno() {
         return dniAlumno;
     }
@@ -128,7 +114,6 @@ public class Alumno {
     public void setMatriculas(List<Matricula> matriculas) {
         this.matriculas = matriculas;
     }
-
 
     @Override
     public String toString() {

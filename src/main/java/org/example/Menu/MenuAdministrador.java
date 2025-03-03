@@ -49,7 +49,7 @@ public class MenuAdministrador {
                 case "6" -> administradorService.actualizarUsuario(administradorService);
                 case "7" -> administradorService.eliminarUsuario(administradorService);
                 case "0" -> System.out.println("Cerrando sesión...");
-                default -> System.out.println("Opción no válida. Intente nuevamente.");
+                default -> System.out.println("❌ Opción inválida. Intente nuevamente.");
             }
         } while (!opcion.equals("0"));
     }

@@ -1,8 +1,8 @@
 package org.example.Menu;
 
-import org.example.DAO.TutorDAO;
 import org.example.Service.AlumnoService;
 import org.example.Service.TutorService;
+
 import java.util.Scanner;
 
 public class MenuTutor {
@@ -46,7 +46,7 @@ public class MenuTutor {
                     new AlumnoService(dniAlumno).verHorarioAlumno();
                 }
                 case 0 -> System.out.println("Cerrando sesión...");
-                default -> System.out.println("Opción no válida. Intente nuevamente.");
+                default -> System.out.println("❌ Opción inválida. Intente nuevamente.");
             }
         } while (opcion != 0);
     }

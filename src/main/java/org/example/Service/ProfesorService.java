@@ -34,9 +34,9 @@ public class ProfesorService {
             profesorDAO.crearProfesor(profesor, usuarioProfesor);
         } catch (RuntimeException e) {
             if (e.getMessage().contains("Duplicate entry")) {
-                System.out.println("El profesor ya existe en la base de datos.");
+                System.out.println("⚠️ El profesor ya existe en la base de datos.");
             } else
-                System.out.println("No se pudo crear el profesor: " + e.getMessage());
+                System.out.println("❌ No se pudo crear el profesor: " + e.getMessage());
         }
     }
 
@@ -55,7 +55,7 @@ public class ProfesorService {
                 }
             }
         } else {
-            System.out.println("Profesor no encontrado.");
+            System.out.println("❌ Profesor no encontrado.");
         }
     }
 
@@ -87,12 +87,12 @@ public class ProfesorService {
                 matricula.setNota(nota);
 
                 matriculaDAO.actualizarMatricula(matricula);
-                System.out.println("Nota actualizada con éxito.");
+                System.out.println("✅ Nota actualizada con éxito.");
             } else {
-                System.out.println("Asignatura no encontrada.");
+                System.out.println("❌ Asignatura no encontrada.");
             }
         } else {
-            System.out.println("Alumno no encontrado.");
+            System.out.println("❌ Alumno no encontrado.");
         }
     }
 }

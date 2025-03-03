@@ -33,7 +33,7 @@ public class MenuProfesor {
                 case "1" -> profesorService.verAsignaturasProfesor();
                 case "2" -> profesorService.añadirNota();
                 case "0" -> System.out.println("Cerrando sesión...");
-                default -> System.out.println("Opción no válida. Intente nuevamente.");
+                default -> System.out.println("❌ Opción inválida. Intente nuevamente.");
             }
         } while (!opcion.equals("0"));
     }

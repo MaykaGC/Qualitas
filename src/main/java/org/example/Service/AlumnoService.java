@@ -31,7 +31,7 @@ public class AlumnoService {
             String dniTutor = new Scanner(System.in).nextLine();
             alumnoDAO.crearAlumno(alumno, usuarioAlumno, dniTutor);
         } catch (RuntimeException e) {
-            System.out.println("No se pudo crear el alumno: " + e.getMessage());
+            System.out.println("❌ No se pudo crear el alumno: " + e.getMessage());
         }
     }
 
@@ -47,7 +47,7 @@ public class AlumnoService {
                 System.out.println("Asignatura: " + asignatura.getNombreAsignatura() + " - Curso: " + asignatura.getCurso());
             }
         } else {
-            System.out.println("Alumno no encontrado.");
+            System.out.println("⚠️ Alumno no encontrado.");
         }
     }
 
@@ -63,7 +63,7 @@ public class AlumnoService {
                 System.out.println("Asignatura: " + asignatura.getNombreAsignatura() + " - Nota: " + matricula.getNota());
             }
         } else {
-            System.out.println("Alumno no encontrado.");
+            System.out.println("⚠️ Alumno no encontrado.");
         }
     }
 }

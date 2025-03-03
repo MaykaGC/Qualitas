@@ -2,14 +2,12 @@ DROP DATABASE IF EXISTS Qualitas;
 CREATE DATABASE Qualitas;
 USE Qualitas;
 
--- Tabla USUARIOS para autenticación y roles
 CREATE TABLE Usuarios (
     DNI CHAR(9) PRIMARY KEY,
     Password VARCHAR(255) NOT NULL,
     Rol ENUM('Alumno', 'Tutor', 'Profesor', 'Administrador') NOT NULL
 );
 
--- Tabla TUTOR
 CREATE TABLE Tutor (
     DNI_Tutor CHAR(9) PRIMARY KEY,
     Nombre_Tutor VARCHAR(100) NOT NULL,
@@ -20,7 +18,6 @@ CREATE TABLE Tutor (
     FOREIGN KEY (DNI_Tutor) REFERENCES Usuarios(DNI) ON DELETE CASCADE
 );
 
--- Tabla ALUMNO
 CREATE TABLE Alumno (
     DNI_Alumno CHAR(9) PRIMARY KEY,
     Nombre_Alumno VARCHAR(100) NOT NULL,
@@ -33,7 +30,6 @@ CREATE TABLE Alumno (
     FOREIGN KEY (DNI_Alumno) REFERENCES Usuarios(DNI) ON DELETE CASCADE
 );
 
--- Tabla PROFESOR
 CREATE TABLE Profesor (
     DNI_Profesor CHAR(9) PRIMARY KEY,
     Nombre_Profesor VARCHAR(100) NOT NULL,
@@ -44,7 +40,6 @@ CREATE TABLE Profesor (
     FOREIGN KEY (DNI_Profesor) REFERENCES Usuarios(DNI) ON DELETE CASCADE
 );
 
--- Tabla ASIGNATURA
 CREATE TABLE Asignatura (
     IdAsignatura INT AUTO_INCREMENT PRIMARY KEY,
     Nombre_Asignatura VARCHAR(100) NOT NULL,
@@ -53,7 +48,6 @@ CREATE TABLE Asignatura (
     FOREIGN KEY (Profesor) REFERENCES Profesor(DNI_Profesor) ON DELETE SET NULL
 );
 
--- Tabla MATRÍCULA
 CREATE TABLE Matricula (
     IdMatricula INT AUTO_INCREMENT PRIMARY KEY,
     IdAlumno CHAR(9),
@@ -62,7 +56,7 @@ CREATE TABLE Matricula (
     FOREIGN KEY (IdAlumno) REFERENCES Alumno(DNI_Alumno) ON DELETE CASCADE,
     FOREIGN KEY (IdAsignatura) REFERENCES Asignatura(IdAsignatura) ON DELETE CASCADE
 );
--- Tabla ADMINISTRADOR
+
 CREATE TABLE Administrador (
     DNI_Administrador CHAR(9) PRIMARY KEY,
     Nombre_Administrador VARCHAR(100) NOT NULL,

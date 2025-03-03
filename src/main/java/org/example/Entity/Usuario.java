@@ -18,15 +18,13 @@ public class Usuario {
     private Rol rol;
 
     public enum Rol {
-        Alumno, Tutor, Profesor, Administrador
+        Alumno, Tutor, Profesor, Administrador;
     }
 
-    public Usuario() {}
+    public Usuario() {
+    }
 
-    public Usuario(String dni, String password, Rol rol) {
-        this.dni = dni;
-        this.password = password;
-        this.rol = rol;
+    public Usuario(String dni, String contrasena, Rol rol) {
     }
 
     public String getDni() {

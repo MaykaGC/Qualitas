@@ -25,7 +25,7 @@ public class AdministradorDAO {
             transaction = session.beginTransaction();
             session.persist(administrador);
             transaction.commit();
-            System.out.println("Cuenta de administrador creada con éxito.");
+            System.out.println("✅ Cuenta de administrador creada con éxito.");
         } catch (Exception e) {
             if (transaction != null) {
                 transaction.rollback();

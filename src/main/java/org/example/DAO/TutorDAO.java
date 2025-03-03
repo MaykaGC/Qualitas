@@ -17,16 +17,9 @@ public class TutorDAO {
         this.usuarioDAO = new UsuarioDAO();
     }
 
-    public Tutor obtenerTutorPorDni(Tutor tutor) {
-        try (Session session = UtilsHibernate.getSessionFactory().openSession()) {
-            return session.get(Tutor.class, tutor.getDniTutor());
-        }
-    }
-
     public void crearTutor(Tutor tutor, Usuario usuario) {
         Transaction transaction = null;
         try (Session session = UtilsHibernate.getSessionFactory().openSession()) {
-
 
             // Primero, verificar si el usuario ya existe en la base de datos
             Usuario usuarioExistente = usuarioDAO.obtenerUsuarioPorDni(usuario.getDni());
@@ -44,7 +37,7 @@ public class TutorDAO {
             transaction = session.beginTransaction();
             session.persist(tutor);
             transaction.commit();
-            System.out.println("Cuenta de tutor creada con éxito.");
+            System.out.println("✅ Cuenta de tutor creada con éxito.");
         } catch (Exception e) {
             if (transaction != null) {
                 transaction.rollback();
@@ -53,7 +46,6 @@ public class TutorDAO {
         }
     }
 
-    // Métod0 para obtener los alumnos asignados a un tutor
     public List<Alumno> obtenerAlumnosTutor(String dniTutor) {
         try (Session session = UtilsHibernate.getSessionFactory().openSession()) {
             // Obtener el tutor y sus alumnos en una sola consulta
@@ -67,7 +59,7 @@ public class TutorDAO {
             }
             return List.of(); // Retorna lista vacía si no se encuentra el tutor
         } catch (Exception e) {
-            System.out.println("Error al obtener los alumnos del tutor: " + e.getMessage());
+            System.out.println("❌ Error al obtener los alumnos del tutor: " + e.getMessage());
             return List.of();
         }
     }

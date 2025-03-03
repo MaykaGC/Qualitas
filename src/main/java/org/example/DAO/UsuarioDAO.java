@@ -4,7 +4,6 @@ import org.example.Entity.Usuario;
 import org.example.Utils.UtilsHibernate;
 import org.example.Utils.UtilsPassword;
 import org.hibernate.Session;
-import org.hibernate.Transaction;
 
 public class UsuarioDAO {
 

@@ -25,9 +25,9 @@ public class TutorService {
             tutorDAO.crearTutor(tutor, usuarioTutor);
         } catch (RuntimeException e) {
             if (e.getMessage().contains("Duplicate entry")) {
-                System.out.println("El tutor ya existe en la base de datos.");
+                System.out.println("⚠️ El tutor ya existe en la base de datos.");
             } else
-                System.out.println("No se pudo crear el tutor: " + e.getMessage());
+                System.out.println("❌ No se pudo crear el tutor: " + e.getMessage());
         }
     }
 

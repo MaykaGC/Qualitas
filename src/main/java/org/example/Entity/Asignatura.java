@@ -24,14 +24,6 @@ public class Asignatura {
     public Asignatura() {
     }
 
-    public Asignatura(String nombreAsignatura, String curso, Profesor profesor) {
-        this.nombreAsignatura = nombreAsignatura;
-        this.curso = curso;
-        this.profesor = profesor;
-    }
-
-    // Getters and Setters
-
     public int getIdAsignatura() {
         return idAsignatura;
     }

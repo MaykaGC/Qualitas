@@ -26,14 +26,6 @@ public class Matricula {
 
     public Matricula() {}
 
-    public Matricula(Alumno alumno, Asignatura asignatura, double nota) {
-        this.alumno = alumno;
-        this.asignatura = asignatura;
-        this.nota = nota;
-    }
-
-    // Getters y Setters
-
     public int getIdMatricula() {
         return idMatricula;
     }

@@ -25,9 +25,9 @@ public class AdministradorService {
             administradorDAO.crearAdministrador(administrador, usuarioAdministrador);
         } catch (RuntimeException e) {
             if (e.getMessage().contains("Duplicate entry")) {
-                System.out.println("El administrador ya existe en la base de datos.");
+                System.out.println("⚠️ El administrador ya existe en la base de datos.");
             } else
-                System.out.println("No se pudo crear el administrador: " + e.getMessage());
+                System.out.println("❌ No se pudo crear el administrador: " + e.getMessage());
         }
     }
 
@@ -40,12 +40,12 @@ public class AdministradorService {
 
         try {
             if (administradorDAO.asignarAsignaturaProfesor(idAsignatura, dniProfesor) != null) {
-                System.out.println("Asignatura asignada correctamente al profesor.");
+                System.out.println("✅ Asignatura asignada correctamente al profesor.");
             } else {
-                System.out.println("Error al asignar la asignatura al profesor.");
+                System.out.println("❌ Error al asignar la asignatura al profesor.");
             }
         } catch (Exception e) {
-            System.out.println("Error al asignar la asignatura: " + e.getMessage());
+            System.out.println("❌ Error al asignar la asignatura: " + e.getMessage());
         }
     }
 
@@ -58,12 +58,12 @@ public class AdministradorService {
 
         try {
             if (administradorDAO.matricularAlumnoEnAsignatura(dniAlumno, idAsignatura) != null) {
-                System.out.println("Alumno matriculado correctamente en la asignatura.");
+                System.out.println("✅ Alumno matriculado correctamente en la asignatura.");
             } else {
-                System.out.println("Error al matricular al alumno.");
+                System.out.println("❌ Error al matricular al alumno.");
             }
         } catch (Exception e) {
-            System.out.println("Error al matricular al alumno: " + e.getMessage());
+            System.out.println("❌ Error al matricular al alumno: " + e.getMessage());
         }
     }
 
@@ -90,7 +90,7 @@ public class AdministradorService {
 
             administradorDAO.crearAsignaturaConProfesor(asignatura, dniProfesor);
         } catch (Exception e) {
-            throw new RuntimeException("Error al crear la asignatura: " + e.getMessage());
+            throw new RuntimeException("❌ Error al crear la asignatura: " + e.getMessage());
         }
     }
 
@@ -102,7 +102,7 @@ public class AdministradorService {
     }
 
     public <T> void actualizarEntidad(Class<T> entidad, String dni, T datosActualizados) {
-        UtilsHibernate.actualizarPorDni(entidad,dni,datosActualizados);
+        UtilsHibernate.actualizarPorDni(entidad, dni, datosActualizados);
         System.out.println("✅ Usuario actualizado correctamente.");
     }
 
@@ -114,7 +114,7 @@ public class AdministradorService {
             case "alumno" -> administradorService.eliminarEntidad(Alumno.class);
             case "profesor" -> administradorService.eliminarEntidad(Profesor.class);
             case "tutor" -> administradorService.eliminarEntidad(Tutor.class);
-            default -> System.out.println("Tipo de usuario no válido.");
+            default -> System.out.println("⚠️ Tipo de usuario inválido.");
         }
     }
 
@@ -147,7 +147,7 @@ public class AdministradorService {
                 tutor.setNombreTutor(scanner.nextLine());
                 administradorService.actualizarEntidad(Tutor.class, dni, tutor);
             }
-            default -> System.out.println("Tipo de usuario no válido.");
+            default -> System.out.println("⚠️Tipo de usuario inválido.");
         }
     }
 }

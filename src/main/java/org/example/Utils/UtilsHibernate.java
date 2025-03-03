@@ -7,14 +7,13 @@ import org.hibernate.cfg.Configuration;
 
 public class UtilsHibernate {
 
-    //con esta clase iniciamos una sesión para establecer conexión con la BBDD
     private static final SessionFactory sessionFactory = buildSessionFactory();
 
     private static SessionFactory buildSessionFactory() {
         try {
             return new Configuration().configure("hibernate.cfg.xml").buildSessionFactory();
         } catch (Throwable e) {
-            System.out.println("Initial SessionFactory creation failed" + e);
+            System.out.println("❌ Initial SessionFactory creation failed" + e);
             throw new ExceptionInInitializerError(e);
         }
     }
@@ -23,7 +22,7 @@ public class UtilsHibernate {
         Transaction transaction = null;
         try (Session session = UtilsHibernate.getSessionFactory().openSession()) {
             transaction = session.beginTransaction();
-            T objeto = buscarPorDni(entidad, dni); // Se busca la entidad por DNI
+            T objeto = buscarPorDni(entidad, dni);
             if (objeto != null) {
                 session.remove(objeto);
                 System.out.println("✅ " + entidad.getSimpleName() + " con ID " + dni + " eliminado correctamente.");
@@ -53,7 +52,7 @@ public class UtilsHibernate {
                 session.merge(objetoExistente); // Guardar la actualización
                 System.out.println("✅ " + entidad.getSimpleName() + " con DNI " + dni + " actualizado correctamente.");
             } else {
-                System.out.println("⚠ No se encontró un " + entidad.getSimpleName() + " con DNI " + dni);
+                System.out.println("⚠️ No se encontró un " + entidad.getSimpleName() + " con DNI " + dni);
             }
 
             transaction.commit();
@@ -70,12 +69,12 @@ public class UtilsHibernate {
             for (var campo : destino.getClass().getDeclaredFields()) {
                 campo.setAccessible(true);
                 Object valor = campo.get(fuente);
-                if (valor != null) { // Solo copiar valores no nulos
+                if (valor != null) {
                     campo.set(destino, valor);
                 }
             }
         } catch (IllegalAccessException e) {
-            throw new RuntimeException("Error al copiar valores entre entidades", e);
+            throw new RuntimeException("❌ Error al copiar valores entre entidades", e);
         }
     }
 
@@ -87,11 +86,11 @@ public class UtilsHibernate {
         }
     }
 
-
     public static SessionFactory getSessionFactory() {
         return sessionFactory;
     }
 
+    // Cerrar la sesión de Hibernate, se debe llamar al no usar try-with-resources para abrir una sesión
     public static void shutdown() {
         getSessionFactory().close();
     }

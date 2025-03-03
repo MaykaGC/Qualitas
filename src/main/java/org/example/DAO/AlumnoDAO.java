@@ -63,13 +63,13 @@ public class AlumnoDAO {
             // Ahora persistimos al alumno
             session.persist(alumno);
             transaction.commit();
-            System.out.println("Cuenta de alumno creada con éxito.");
+            System.out.println("✅ Cuenta de alumno creada con éxito.");
         } catch (Exception e) {
             if (transaction != null) {
                 try {
                     transaction.rollback();
                 } catch (Exception rollbackEx) {
-                    rollbackEx.printStackTrace();
+                    throw new RuntimeException(rollbackEx);
                 }
             }
             throw new RuntimeException(e);

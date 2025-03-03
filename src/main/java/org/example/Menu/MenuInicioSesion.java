@@ -28,7 +28,7 @@ public class MenuInicioSesion {
                 case "1" -> usuarioService.iniciarSesion();
                 case "2" -> usuarioService.crearCuenta();
                 case "0" -> System.out.println("Saliendo de la aplicación...");
-                default -> System.out.println("Opción no válida. Intente nuevamente.");
+                default -> System.out.println("❌ Opción inválida. Intente nuevamente.");
             }
         } while (!opcion.equals("0"));
     }

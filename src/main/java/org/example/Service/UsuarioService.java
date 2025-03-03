@@ -28,10 +28,10 @@ public class UsuarioService {
                 case "Profesor" -> new MenuProfesor(dni).mostrarMenu();
                 case "Tutor" -> new MenuTutor(dni).mostrarMenu();
                 case "Administrador" -> new MenuAdministrador().mostrarMenu();
-                default -> System.out.println("Rol inválido. Intente nuevamente.");
+                default -> System.out.println("⚠️ Rol inválido. Intente nuevamente.");
             }
         } else {
-            System.out.println("Credenciales incorrectas o usuario inexistente. Intente nuevamente.");
+            System.out.println("❌ Credenciales incorrectas o usuario inexistente. Intente nuevamente.");
         }
     }
 
@@ -61,7 +61,7 @@ public class UsuarioService {
             case '2' -> new ProfesorService("").crearProfesor(dni, nombre, correoElectronico, contrasenaEncriptada, fecha, direccion, telefono);
             case '3' -> new TutorService().crearTutor(dni, nombre, correoElectronico, contrasenaEncriptada, fecha, direccion, telefono);
             case '4' -> new AdministradorService().crearAdministrador(dni, nombre, correoElectronico, contrasenaEncriptada, fecha, direccion, telefono);
-            default -> System.out.println("Rol no válido. Intente nuevamente.");
+            default -> System.out.println("⚠️ Rol inválido. Intente nuevamente.");
         }
     }
 }

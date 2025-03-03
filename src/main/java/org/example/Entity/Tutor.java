@@ -38,27 +38,6 @@ public class Tutor {
     public Tutor() {
     }
 
-    public Tutor(String dniTutor, String nombreTutor, String emailTutor, Date fechaNacimientoTutor, String direccionTutor, String telefonoTutor, Usuario usuario, List<Alumno> alumnos) {
-        this.dniTutor = dniTutor;
-        this.nombreTutor = nombreTutor;
-        this.emailTutor = emailTutor;
-        this.fechaNacimientoTutor = fechaNacimientoTutor;
-        this.direccionTutor = direccionTutor;
-        this.telefonoTutor = telefonoTutor;
-        this.usuario = usuario;
-        this.alumnos = alumnos;
-    }
-
-    public Tutor(String dniTutor, String nombreTutor, String emailTutor, Date fechaNacimientoTutor, String direccionTutor, String telefonoTutor, Usuario usuario) {
-        this.dniTutor = dniTutor;
-        this.nombreTutor = nombreTutor;
-        this.emailTutor = emailTutor;
-        this.fechaNacimientoTutor = fechaNacimientoTutor;
-        this.direccionTutor = direccionTutor;
-        this.telefonoTutor = telefonoTutor;
-        this.usuario = usuario;
-    }
-
     public String getDniTutor() {
         return dniTutor;
     }

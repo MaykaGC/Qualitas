@@ -12,7 +12,7 @@ public class ProfesorDAO {
     private final UsuarioDAO usuarioDAO;
 
     public ProfesorDAO() {
-        this.usuarioDAO = new UsuarioDAO(); // Inicializamos el DAO de Usuario
+        this.usuarioDAO = new UsuarioDAO();
     }
 
     // Métod0 para obtener un profesor por su DNI
@@ -33,13 +33,7 @@ public class ProfesorDAO {
         return result;
     }
 
-//    public Profesor obtenerProfesorPorDni(Profesor profesor) {
-//        try (Session session = UtilsHibernate.getSessionFactory().openSession()) {
-//            return session.get(Profesor.class, profesor.getDniProfesor());
-//        }
-//    }
-
-    // Método para crear un nuevo profesor, incluyendo su usuario
+    // Métod0 para crear un nuevo profesor, incluyendo su usuario
     public void crearProfesor(Profesor profesor, Usuario usuario) {
         Transaction transaction = null;
         try (Session session = UtilsHibernate.getSessionFactory().openSession()) {
@@ -64,7 +58,7 @@ public class ProfesorDAO {
             // Ahora persistimos al profesor
             session.persist(profesor);
             transaction.commit();
-            System.out.println("Cuenta de profesor creada con éxito.");
+            System.out.println("✅ Cuenta de profesor creada con éxito.");
         } catch (Exception e) {
             if (transaction != null) {
                 transaction.rollback();

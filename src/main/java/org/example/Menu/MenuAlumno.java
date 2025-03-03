@@ -34,7 +34,7 @@ public class MenuAlumno {
                 case "1" -> alumnoService.verNotasAlumno();
                 case "2" -> alumnoService.verHorarioAlumno();
                 case "0" -> System.out.println("Cerrando sesión...");
-                default -> System.out.println("Opción inválida. Intente nuevamente.");
+                default -> System.out.println("❌ Opción inválida. Intente nuevamente.");
             }
         } while (!opcion.equals("0"));
     }

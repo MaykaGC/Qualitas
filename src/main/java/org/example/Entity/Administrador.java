@@ -1,6 +1,7 @@
 package org.example.Entity;
 
 import jakarta.persistence.*;
+
 import java.util.Date;
 
 @Entity
@@ -31,16 +32,6 @@ public class Administrador {
     private Usuario usuario;
 
     public Administrador() {
-    }
-
-    public Administrador(String dniAdministrador, String nombreAdministrador, String emailAdministrador, Date fechaNacimientoAdministrador, String direccionAdministrador, String telefonoAdministrador, Usuario usuario) {
-        this.dniAdministrador = dniAdministrador;
-        this.nombreAdministrador = nombreAdministrador;
-        this.emailAdministrador = emailAdministrador;
-        this.fechaNacimientoAdministrador = fechaNacimientoAdministrador;
-        this.direccionAdministrador = direccionAdministrador;
-        this.telefonoAdministrador = telefonoAdministrador;
-        this.usuario = usuario;
     }
 
     public String getDniAdministrador() {
