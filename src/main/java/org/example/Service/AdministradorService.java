@@ -2,6 +2,7 @@ package org.example.Service;
 
 import org.example.DAO.AdministradorDAO;
 import org.example.Entity.*;
+import org.example.Utils.Logger;
 import org.example.Utils.UtilsHibernate;
 
 import java.util.Date;
@@ -26,8 +27,11 @@ public class AdministradorService {
         } catch (RuntimeException e) {
             if (e.getMessage().contains("Duplicate entry")) {
                 System.out.println("⚠️ El administrador ya existe en la base de datos.");
-            } else
+                Logger.logWarning("Crear administrador: El administrador ya existe en la base de datos.");
+            } else {
                 System.out.println("❌ No se pudo crear el administrador: " + e.getMessage());
+                Logger.logError("Crear administrador: No se pudo crear el administrador -> " + e.getMessage());
+            }
         }
     }
 
@@ -41,11 +45,14 @@ public class AdministradorService {
         try {
             if (administradorDAO.asignarAsignaturaProfesor(idAsignatura, dniProfesor) != null) {
                 System.out.println("✅ Asignatura asignada correctamente al profesor.");
+                Logger.logInfo("Asignar asignatura al profesor: Asignatura asignada correctamente");
             } else {
                 System.out.println("❌ Error al asignar la asignatura al profesor.");
+                Logger.logError("Asignar asignatura al profesor: Error al asignar la asignatura al profesor");
             }
         } catch (Exception e) {
             System.out.println("❌ Error al asignar la asignatura: " + e.getMessage());
+            Logger.logError("Asignar asignatura al profesor: Error al asignar la asignatura -> " + e.getMessage());
         }
     }
 
@@ -59,11 +66,14 @@ public class AdministradorService {
         try {
             if (administradorDAO.matricularAlumnoEnAsignatura(dniAlumno, idAsignatura) != null) {
                 System.out.println("✅ Alumno matriculado correctamente en la asignatura.");
+                Logger.logInfo("Matricular alumno en asignatura: Alumno matriculado correctamente");
             } else {
                 System.out.println("❌ Error al matricular al alumno.");
+                Logger.logError("Matricular alumno en asignatura: Error al matricular al alumno");
             }
         } catch (Exception e) {
             System.out.println("❌ Error al matricular al alumno: " + e.getMessage());
+            Logger.logError("Matricular alumno en asignatura: Error al matricular al alumno -> " + e.getMessage());
         }
     }
 
@@ -90,7 +100,8 @@ public class AdministradorService {
 
             administradorDAO.crearAsignaturaConProfesor(asignatura, dniProfesor);
         } catch (Exception e) {
-            throw new RuntimeException("❌ Error al crear la asignatura: " + e.getMessage());
+            System.out.println("❌ Error al crear la asignatura: " + e.getMessage());
+            Logger.logError("Crear asignatura: Error al crear la asignatura -> " + e.getMessage());
         }
     }
 
@@ -99,11 +110,13 @@ public class AdministradorService {
         String dni = scanner.nextLine();
         UtilsHibernate.eliminarPorId(entidad, dni);
         System.out.println("✅ Usuario eliminado correctamente.");
+        Logger.logInfo("Eliminar entidad: Usuario eliminado correctamente");
     }
 
     public <T> void actualizarEntidad(Class<T> entidad, String dni, T datosActualizados) {
         UtilsHibernate.actualizarPorDni(entidad, dni, datosActualizados);
         System.out.println("✅ Usuario actualizado correctamente.");
+        Logger.logInfo("Actualizar entidad: Usuario actualizado correctamente");
     }
 
     public void eliminarUsuario(AdministradorService administradorService) {
@@ -111,10 +124,22 @@ public class AdministradorService {
         String tipo = scanner.nextLine().toLowerCase();
 
         switch (tipo) {
-            case "alumno" -> administradorService.eliminarEntidad(Alumno.class);
-            case "profesor" -> administradorService.eliminarEntidad(Profesor.class);
-            case "tutor" -> administradorService.eliminarEntidad(Tutor.class);
-            default -> System.out.println("⚠️ Tipo de usuario inválido.");
+            case "alumno" -> {
+                administradorService.eliminarEntidad(Alumno.class);
+                Logger.logInfo("Eliminar usuario: opción alumno seleccionada");
+            }
+            case "profesor" -> {
+                administradorService.eliminarEntidad(Profesor.class);
+                Logger.logInfo("Eliminar usuario: opción profesor seleccionada");
+            }
+            case "tutor" -> {
+                administradorService.eliminarEntidad(Tutor.class);
+                Logger.logInfo("Eliminar usuario: opción tutor seleccionada");
+            }
+            default -> {
+                System.out.println("⚠️ Tipo de usuario inválido.");
+                Logger.logWarning("Eliminar usuario: Tipo de usuario inválido");
+            }
         }
     }
 
@@ -132,6 +157,7 @@ public class AdministradorService {
                 System.out.println("Nuevo nombre: ");
                 alumno.setNombreAlumno(scanner.nextLine());
                 administradorService.actualizarEntidad(Alumno.class, dni, alumno);
+                Logger.logInfo("Actualizar usuario: opción alumno seleccionada");
             }
             case "profesor" -> {
                 Profesor profesor = new Profesor();
@@ -139,6 +165,7 @@ public class AdministradorService {
                 System.out.println("Nuevo nombre: ");
                 profesor.setNombreProfesor(scanner.nextLine());
                 administradorService.actualizarEntidad(Profesor.class, dni, profesor);
+                Logger.logInfo("Actualizar usuario: opción profesor seleccionada");
             }
             case "tutor" -> {
                 Tutor tutor = new Tutor();
@@ -146,8 +173,12 @@ public class AdministradorService {
                 System.out.println("Nuevo nombre: ");
                 tutor.setNombreTutor(scanner.nextLine());
                 administradorService.actualizarEntidad(Tutor.class, dni, tutor);
+                Logger.logInfo("Actualizar usuario: opción tutor seleccionada");
             }
-            default -> System.out.println("⚠️Tipo de usuario inválido.");
+            default -> {
+                System.out.println("⚠️Tipo de usuario inválido.");
+                Logger.logWarning("Actualizar usuario: Tipo de usuario inválido");
+            }
         }
     }
 }

@@ -4,6 +4,7 @@ import org.example.Entity.Alumno;
 import org.example.Entity.Matricula;
 import org.example.Entity.Tutor;
 import org.example.Entity.Usuario;
+import org.example.Utils.Logger;
 import org.example.Utils.UtilsHibernate;
 import org.hibernate.Hibernate;
 import org.hibernate.Session;
@@ -40,6 +41,7 @@ public class AlumnoDAO {
             Tutor tutor = session.get(Tutor.class, dniTutor);
             if (tutor == null) {
                 System.out.println("El tutor con DNI " + dniTutor + " no existe");
+                Logger.logError("El tutor con DNI - Se oculta por privacidad - no existe");
                 return;
             }
 
@@ -64,6 +66,7 @@ public class AlumnoDAO {
             session.persist(alumno);
             transaction.commit();
             System.out.println("✅ Cuenta de alumno creada con éxito.");
+            Logger.logInfo("Cuenta de alumno creada con éxito.");
         } catch (Exception e) {
             if (transaction != null) {
                 try {

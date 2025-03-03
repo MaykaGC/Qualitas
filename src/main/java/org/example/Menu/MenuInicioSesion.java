@@ -1,6 +1,8 @@
 package org.example.Menu;
 
 import org.example.Service.UsuarioService;
+import org.example.Utils.Logger;
+
 import java.text.ParseException;
 import java.util.Scanner;
 
@@ -25,12 +27,25 @@ public class MenuInicioSesion {
             opcion = scanner.nextLine();
 
             switch (opcion) {
-                case "1" -> usuarioService.iniciarSesion();
-                case "2" -> usuarioService.crearCuenta();
-                case "0" -> System.out.println("Saliendo de la aplicación...");
-                default -> System.out.println("❌ Opción inválida. Intente nuevamente.");
+                case "1" -> {
+                    usuarioService.iniciarSesion();
+                    Logger.logInfo("Menú de inicio de sesión: Iniciar sesión");
+                }
+                case "2" -> {
+                    usuarioService.crearCuenta();
+                    Logger.logInfo("Menú de inicio de sesión: Crear cuenta");
+                }
+                case "0" -> {
+                    System.out.println("Saliendo de la aplicación...");
+                    Logger.logInfo("Menú de inicio de sesión: Salir");
+                }
+                default -> {
+                    System.out.println("❌ Opción inválida. Intente nuevamente.");
+                    Logger.logError("Menú de inicio de sesión: Opción inválida");
+                }
             }
         } while (!opcion.equals("0"));
+        Logger.logInfo("Menú inicio de sesión: Menú cerrado");
     }
 }
 

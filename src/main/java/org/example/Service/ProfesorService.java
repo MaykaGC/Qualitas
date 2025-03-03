@@ -5,6 +5,8 @@ import org.example.DAO.AsignaturaDAO;
 import org.example.DAO.MatriculaDAO;
 import org.example.DAO.ProfesorDAO;
 import org.example.Entity.*;
+import org.example.Utils.Logger;
+
 import java.util.Date;
 import java.util.Scanner;
 
@@ -35,8 +37,11 @@ public class ProfesorService {
         } catch (RuntimeException e) {
             if (e.getMessage().contains("Duplicate entry")) {
                 System.out.println("⚠️ El profesor ya existe en la base de datos.");
-            } else
+                Logger.logWarning("Crear profesor: El profesor ya existe en la base de datos.");
+            } else{
                 System.out.println("❌ No se pudo crear el profesor: " + e.getMessage());
+                Logger.logError("Crear profesor: No se pudo crear el profesor: " + e.getMessage());
+            }
         }
     }
 
@@ -56,6 +61,7 @@ public class ProfesorService {
             }
         } else {
             System.out.println("❌ Profesor no encontrado.");
+            Logger.logError("Ver asignaturas profesor: Profesor no encontrado.");
         }
     }
 
@@ -88,11 +94,14 @@ public class ProfesorService {
 
                 matriculaDAO.actualizarMatricula(matricula);
                 System.out.println("✅ Nota actualizada con éxito.");
+                Logger.logInfo("Añadir nota: Nota actualizada con éxito.");
             } else {
                 System.out.println("❌ Asignatura no encontrada.");
+                Logger.logError("Añadir nota: Asignatura no encontrada.");
             }
         } else {
             System.out.println("❌ Alumno no encontrado.");
+            Logger.logError("Añadir nota: Alumno no encontrado.");
         }
     }
 }

@@ -2,6 +2,7 @@ package org.example.Menu;
 
 import org.example.Service.AlumnoService;
 import org.example.Service.TutorService;
+import org.example.Utils.Logger;
 
 import java.util.Scanner;
 
@@ -34,20 +35,32 @@ public class MenuTutor {
             TutorService tutorService = new TutorService();
 
             switch (opcion) {
-                case 1 -> tutorService.obtenerAlumnosTutor(usuarioLogeado);
+                case 1 -> {
+                    tutorService.obtenerAlumnosTutor(usuarioLogeado);
+                    Logger.logInfo("Menú Tutor: Ver mis alumnos");
+                }
                 case 2 -> {
                     System.out.println("Introduce el DNI del alumno: ");
                     String dniAlumno = scanner.nextLine();
                     new AlumnoService(dniAlumno).verNotasAlumno();
+                    Logger.logInfo("Menú Tutor: Ver nota de un alumno");
                 }
                 case 3 -> {
                     System.out.println("Introduce el DNI del alumno: ");
                     String dniAlumno = scanner.nextLine();
                     new AlumnoService(dniAlumno).verHorarioAlumno();
+                    Logger.logInfo("Menú Tutor: Ver horario de un alumno");
                 }
-                case 0 -> System.out.println("Cerrando sesión...");
-                default -> System.out.println("❌ Opción inválida. Intente nuevamente.");
+                case 0 -> {
+                    System.out.println("Cerrando sesión...");
+                    Logger.logInfo("Menú Tutor: Cerrar sesión");
+                }
+                default -> {
+                    System.out.println("❌ Opción inválida. Intente nuevamente.");
+                    Logger.logError("Menú Tutor: Opción inválida");
+                }
             }
         } while (opcion != 0);
+        Logger.logInfo("Menú Tutor: Menú cerrado");
     }
 }

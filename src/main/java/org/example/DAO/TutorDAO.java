@@ -3,6 +3,7 @@ package org.example.DAO;
 import org.example.Entity.Alumno;
 import org.example.Entity.Tutor;
 import org.example.Entity.Usuario;
+import org.example.Utils.Logger;
 import org.example.Utils.UtilsHibernate;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
@@ -38,6 +39,7 @@ public class TutorDAO {
             session.persist(tutor);
             transaction.commit();
             System.out.println("✅ Cuenta de tutor creada con éxito.");
+            Logger.logInfo("Cuenta de tutor creada con éxito.");
         } catch (Exception e) {
             if (transaction != null) {
                 transaction.rollback();
@@ -60,6 +62,7 @@ public class TutorDAO {
             return List.of(); // Retorna lista vacía si no se encuentra el tutor
         } catch (Exception e) {
             System.out.println("❌ Error al obtener los alumnos del tutor: " + e.getMessage());
+            Logger.logError("Error al obtener los alumnos del tutor: " + e.getMessage());
             return List.of();
         }
     }

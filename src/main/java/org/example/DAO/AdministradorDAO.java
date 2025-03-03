@@ -1,6 +1,7 @@
 package org.example.DAO;
 
 import org.example.Entity.*;
+import org.example.Utils.Logger;
 import org.example.Utils.UtilsHibernate;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
@@ -26,6 +27,7 @@ public class AdministradorDAO {
             session.persist(administrador);
             transaction.commit();
             System.out.println("✅ Cuenta de administrador creada con éxito.");
+            Logger.logInfo("Cuenta de administrador creada con éxito.");
         } catch (Exception e) {
             if (transaction != null) {
                 transaction.rollback();
@@ -98,6 +100,7 @@ public class AdministradorDAO {
                 if (profesor == null) {
                     System.out.println("El profesor con DNI " + dniProfesor + " no existe.\nPuedes asignarlo después desde el menú.");
                     System.out.println("✅ Asignatura creada correctamente.");
+                    Logger.logInfo("Asignatura creada correctamente.");
                     return;
                 }
                 asignatura.setProfesor(profesor);
@@ -106,8 +109,10 @@ public class AdministradorDAO {
 
             transaction.commit();
             System.out.println("✅ Asignatura creada correctamente.");
+            Logger.logInfo("Asignatura creada correctamente.");
         } catch (Exception e) {
             System.out.println("❌ Error al crear la asignatura: " + e.getMessage());
+            Logger.logError("Error al crear la asignatura: " + e.getMessage());
             if (transaction != null) transaction.rollback();
             throw new RuntimeException(e);
         }

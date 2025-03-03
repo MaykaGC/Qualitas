@@ -4,6 +4,7 @@ import org.example.DAO.TutorDAO;
 import org.example.Entity.Alumno;
 import org.example.Entity.Tutor;
 import org.example.Entity.Usuario;
+import org.example.Utils.Logger;
 
 import java.util.Date;
 import java.util.List;
@@ -26,8 +27,11 @@ public class TutorService {
         } catch (RuntimeException e) {
             if (e.getMessage().contains("Duplicate entry")) {
                 System.out.println("⚠️ El tutor ya existe en la base de datos.");
-            } else
+                Logger.logWarning("Crear tutor: El tutor ya existe en la base de datos.");
+            } else{
                 System.out.println("❌ No se pudo crear el tutor: " + e.getMessage());
+                Logger.logError("Crear tutor: Error al crear el tutor -> " + e.getMessage());
+            }
         }
     }
 

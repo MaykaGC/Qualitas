@@ -3,6 +3,7 @@ package org.example.Service;
 import org.example.DAO.*;
 import org.example.Entity.Usuario;
 import org.example.Menu.*;
+import org.example.Utils.Logger;
 import org.example.Utils.UtilsPassword;
 
 import java.text.ParseException;
@@ -24,14 +25,30 @@ public class UsuarioService {
         if (usuario != null) {
             String rolUsuario = usuario.getRol().toString();
             switch (rolUsuario) {
-                case "Alumno" -> new MenuAlumno(dni).mostrarMenu();
-                case "Profesor" -> new MenuProfesor(dni).mostrarMenu();
-                case "Tutor" -> new MenuTutor(dni).mostrarMenu();
-                case "Administrador" -> new MenuAdministrador().mostrarMenu();
-                default -> System.out.println("⚠️ Rol inválido. Intente nuevamente.");
+                case "Alumno" -> {
+                    new MenuAlumno(dni).mostrarMenu();
+                    Logger.logInfo("Iniciar sesión: opción alumno seleccionada");
+                }
+                case "Profesor" -> {
+                    new MenuProfesor(dni).mostrarMenu();
+                    Logger.logInfo("Iniciar sesión: opción profesor seleccionada");
+                }
+                case "Tutor" -> {
+                    new MenuTutor(dni).mostrarMenu();
+                    Logger.logInfo("Iniciar sesión: opción tutor seleccionada");
+                }
+                case "Administrador" -> {
+                    new MenuAdministrador().mostrarMenu();
+                    Logger.logInfo("Iniciar sesión: opción administrador seleccionada");
+                }
+                default -> {
+                    System.out.println("⚠️ Rol inválido. Intente nuevamente.");
+                    Logger.logWarning("Iniciar sesión: rol inválido");
+                }
             }
         } else {
             System.out.println("❌ Credenciales incorrectas o usuario inexistente. Intente nuevamente.");
+            Logger.logError("Iniciar sesión: credenciales incorrectas o usuario inexistente");
         }
     }
 
@@ -57,11 +74,26 @@ public class UsuarioService {
 
         char rol = codVinculacion.charAt(0);
         switch (rol) {
-            case '1' -> new AlumnoService("").crearAlumno(dni, nombre, correoElectronico, contrasenaEncriptada, fecha, direccion, telefono);
-            case '2' -> new ProfesorService("").crearProfesor(dni, nombre, correoElectronico, contrasenaEncriptada, fecha, direccion, telefono);
-            case '3' -> new TutorService().crearTutor(dni, nombre, correoElectronico, contrasenaEncriptada, fecha, direccion, telefono);
-            case '4' -> new AdministradorService().crearAdministrador(dni, nombre, correoElectronico, contrasenaEncriptada, fecha, direccion, telefono);
-            default -> System.out.println("⚠️ Rol inválido. Intente nuevamente.");
+            case '1' -> {
+                new AlumnoService("").crearAlumno(dni, nombre, correoElectronico, contrasenaEncriptada, fecha, direccion, telefono);
+                Logger.logInfo("Crear cuenta: opción alumno seleccionada");
+            }
+            case '2' -> {
+                new ProfesorService("").crearProfesor(dni, nombre, correoElectronico, contrasenaEncriptada, fecha, direccion, telefono);
+                Logger.logInfo("Crear cuenta: opción profesor seleccionada");
+            }
+            case '3' -> {
+                new TutorService().crearTutor(dni, nombre, correoElectronico, contrasenaEncriptada, fecha, direccion, telefono);
+                Logger.logInfo("Crear cuenta: opción tutor seleccionada");
+            }
+            case '4' -> {
+                new AdministradorService().crearAdministrador(dni, nombre, correoElectronico, contrasenaEncriptada, fecha, direccion, telefono);
+                Logger.logInfo("Crear cuenta: opción administrador seleccionada");
+            }
+            default -> {
+                System.out.println("⚠️ Rol inválido. Intente nuevamente.");
+                Logger.logWarning("Crear cuenta: rol inválido");
+            }
         }
     }
 }

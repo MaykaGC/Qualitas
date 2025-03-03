@@ -2,6 +2,7 @@ package org.example.DAO;
 
 import org.example.Entity.Profesor;
 import org.example.Entity.Usuario;
+import org.example.Utils.Logger;
 import org.example.Utils.UtilsHibernate;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
@@ -15,7 +16,6 @@ public class ProfesorDAO {
         this.usuarioDAO = new UsuarioDAO();
     }
 
-    // Métod0 para obtener un profesor por su DNI
     public Profesor obtenerProfesorPorDni(Profesor profesor) {
         Transaction transaction = null;
         Profesor result = null;
@@ -33,7 +33,6 @@ public class ProfesorDAO {
         return result;
     }
 
-    // Métod0 para crear un nuevo profesor, incluyendo su usuario
     public void crearProfesor(Profesor profesor, Usuario usuario) {
         Transaction transaction = null;
         try (Session session = UtilsHibernate.getSessionFactory().openSession()) {
@@ -59,6 +58,7 @@ public class ProfesorDAO {
             session.persist(profesor);
             transaction.commit();
             System.out.println("✅ Cuenta de profesor creada con éxito.");
+            Logger.logInfo("Cuenta de profesor creada con éxito.");
         } catch (Exception e) {
             if (transaction != null) {
                 transaction.rollback();

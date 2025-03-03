@@ -5,6 +5,8 @@ import org.example.Entity.Alumno;
 import org.example.Entity.Asignatura;
 import org.example.Entity.Matricula;
 import org.example.Entity.Usuario;
+import org.example.Utils.Logger;
+
 import java.util.Date;
 import java.util.Scanner;
 
@@ -32,6 +34,7 @@ public class AlumnoService {
             alumnoDAO.crearAlumno(alumno, usuarioAlumno, dniTutor);
         } catch (RuntimeException e) {
             System.out.println("❌ No se pudo crear el alumno: " + e.getMessage());
+            Logger.logError("Crear alumno: No se pudo crear el alumno -> " + e.getMessage());
         }
     }
 
@@ -48,6 +51,7 @@ public class AlumnoService {
             }
         } else {
             System.out.println("⚠️ Alumno no encontrado.");
+            Logger.logWarning("Ver horario del alumno: Alumno no encontrado");
         }
     }
 
@@ -64,6 +68,7 @@ public class AlumnoService {
             }
         } else {
             System.out.println("⚠️ Alumno no encontrado.");
+            Logger.logWarning("Ver notas del alumno: Alumno no encontrado");
         }
     }
 }
