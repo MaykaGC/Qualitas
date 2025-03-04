@@ -20,7 +20,7 @@ public class MenuAdministrador {
                     1. Asignar asignatura a profesor
                     2. Matricular alumno en asignatura
                     3. Ver asignaturas de profesor
-                    4. Ver horario de alumno
+                    4. Ver asignaturas de alumno
                     5. Crear asignatura
                     6. Actualizar usuario
                     7. Eliminar usuario
@@ -51,8 +51,8 @@ public class MenuAdministrador {
                 case "4" -> {
                     System.out.println("Introduce el DNI del alumno");
                     String dniAlumno = scanner.nextLine();
-                    new AlumnoService(dniAlumno).verHorarioAlumno();
-                    Logger.logInfo("Menú Administrador: Ver horario de alumno");
+                    new AlumnoService(dniAlumno).verAsignaturasAlumno();
+                    Logger.logInfo("Menú Administrador: Ver asignaturas de alumno");
                 }
                 case "5" -> {
                     administradorService.crearAsignatura();

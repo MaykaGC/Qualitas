@@ -29,7 +29,7 @@ public class UsuarioDAO {
 
             // Verifica la contraseña ingresada con la almacenada
             if (UtilsPassword.checkPassword(passwordIngresada, usuario.getPassword())) {
-                return usuario; // Contraseña válida, retorna el usuario
+                return usuario; // Contraseña válida
             } else {
                 return null; // Contraseña incorrecta
             }

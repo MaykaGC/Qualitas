@@ -37,7 +37,7 @@ public class MenuAlumno {
                     Logger.logInfo("Menú Alumno: Ver notas");
                 }
                 case "2" -> {
-                    alumnoService.verHorarioAlumno();
+                    alumnoService.verAsignaturasAlumno();
                     Logger.logInfo("Menú Alumno: Ver asignaturas");
                 }
                 case "0" -> {

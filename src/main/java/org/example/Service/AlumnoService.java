@@ -38,7 +38,7 @@ public class AlumnoService {
         }
     }
 
-    public void verHorarioAlumno() {
+    public void verAsignaturasAlumno() {
         Alumno alumno = new Alumno();
         alumno.setDniAlumno(usuarioLogeado);
         alumno = alumnoDAO.obtenerAlumnoPorDni(alumno);
@@ -51,7 +51,7 @@ public class AlumnoService {
             }
         } else {
             System.out.println("⚠️ Alumno no encontrado.");
-            Logger.logWarning("Ver horario del alumno: Alumno no encontrado");
+            Logger.logWarning("Ver asignaturas del alumno: Alumno no encontrado");
         }
     }
 

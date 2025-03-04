@@ -22,8 +22,8 @@ public class MenuTutor {
                     ========== Menú Tutor ==========
                     --------------------------------
                     1. Ver mis alumnos
-                    2. Ver nota de un alumno
-                    3. Ver horario de un alumno
+                    2. Ver notas de un alumno
+                    3. Ver asignaturas de un alumno
                     0. Cerrar sesión
                     --------------------------------
                     ================================
@@ -48,8 +48,8 @@ public class MenuTutor {
                 case 3 -> {
                     System.out.println("Introduce el DNI del alumno: ");
                     String dniAlumno = scanner.nextLine();
-                    new AlumnoService(dniAlumno).verHorarioAlumno();
-                    Logger.logInfo("Menú Tutor: Ver horario de un alumno");
+                    new AlumnoService(dniAlumno).verAsignaturasAlumno();
+                    Logger.logInfo("Menú Tutor: Ver asignaturas de un alumno");
                 }
                 case 0 -> {
                     System.out.println("Cerrando sesión...");
