@@ -10,18 +10,34 @@ import org.hibernate.Hibernate;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
+/**
+ * Clase que gestiona las operaciones de base de datos relacionadas con el alumno,
+ * como la creación de cuentas de alumno y la obtención de información sobre alumnos.
+ */
 public class AlumnoDAO {
 
     private final UsuarioDAO usuarioDAO;
 
+    /**
+     * Constructor de la clase {@link AlumnoDAO}.
+     * Inicializa una instancia de {@link UsuarioDAO} para gestionar operaciones de usuario.
+     */
     public AlumnoDAO() {
         this.usuarioDAO = new UsuarioDAO();
     }
 
+    /**
+     * Obtiene un alumno por su DNI.
+     * Este método también inicializa las matriculas y las asignaturas asociadas al alumno.
+     *
+     * @param alumno El objeto {@link Alumno} con el DNI a buscar.
+     * @return El objeto {@link Alumno} correspondiente al DNI proporcionado, o null si no existe.
+     */
     public Alumno obtenerAlumnoPorDni(Alumno alumno) {
         try (Session session = UtilsHibernate.getSessionFactory().openSession()) {
             Alumno result = session.get(Alumno.class, alumno.getDniAlumno());
             if (result != null) {
+                // Inicializamos las matriculas y las asignaturas asociadas
                 Hibernate.initialize(result.getMatriculas());
                 for (Matricula matricula : result.getMatriculas()) {
                     Hibernate.initialize(matricula.getAsignatura());
@@ -31,11 +47,18 @@ public class AlumnoDAO {
         }
     }
 
+    /**
+     * Crea una cuenta de alumno en la base de datos.
+     * Si el tutor o el usuario no existen, se crean. Luego, se vincula el alumno con el tutor y el usuario.
+     *
+     * @param alumno El objeto {@link Alumno} a ser creado.
+     * @param usuario El objeto {@link Usuario} asociado al alumno.
+     * @param dniTutor El DNI del tutor que será asignado al alumno.
+     */
     public void crearAlumno(Alumno alumno, Usuario usuario, String dniTutor) {
         Transaction transaction = null;
         try (Session session = UtilsHibernate.getSessionFactory().openSession()) {
             transaction = session.beginTransaction();
-
 
             // Verificamos si el tutor existe
             Tutor tutor = session.get(Tutor.class, dniTutor);
@@ -52,7 +75,7 @@ public class AlumnoDAO {
             if (usuarioExistente == null) {
                 usuarioDAO.crearUsuario(session, usuario);
             } else {
-                // Si el usuario ya existe, podemos usar el usuario existente
+                // Si el usuario ya existe, usamos el usuario existente
                 usuario = usuarioExistente;
             }
 
@@ -62,7 +85,7 @@ public class AlumnoDAO {
             // Establecemos el tutor al alumno
             alumno.setTutor(tutor);
 
-            // Ahora persistimos al alumno
+            // Ahora persistimos al alumno en la base de datos
             session.persist(alumno);
             transaction.commit();
             System.out.println("✅ Cuenta de alumno creada con éxito.");

@@ -8,10 +8,27 @@ import org.example.Utils.UtilsHibernate;
 import java.util.Date;
 import java.util.Scanner;
 
+/**
+ * Clase encargada de gestionar las operaciones relacionadas con los administradores en el sistema.
+ * Esta clase incluye funcionalidades para crear administradores, asignar asignaturas a profesores,
+ * matricular alumnos en asignaturas, eliminar y actualizar entidades, entre otras.
+ */
 public class AdministradorService {
     private static final AdministradorDAO administradorDAO = new AdministradorDAO();
     private static final Scanner scanner = new Scanner(System.in);
 
+    /**
+     * Crea un nuevo administrador en el sistema.
+     * Este método también crea un usuario administrador asociado.
+     *
+     * @param dni               El DNI del administrador.
+     * @param nombre            El nombre del administrador.
+     * @param correoElectronico El correo electrónico del administrador.
+     * @param contrasena        La contraseña del administrador.
+     * @param miDate            La fecha de nacimiento del administrador.
+     * @param direccion         La dirección del administrador.
+     * @param telefono          El número de teléfono del administrador.
+     */
     public void crearAdministrador(String dni, String nombre, String correoElectronico, String contrasena, Date miDate, String direccion, String telefono) {
         Administrador administrador = new Administrador();
         administrador.setDniAdministrador(dni);
@@ -35,6 +52,10 @@ public class AdministradorService {
         }
     }
 
+    /**
+     * Asigna una asignatura a un profesor en el sistema.
+     * El método solicita el DNI del profesor y el ID de la asignatura para realizar la asignación.
+     */
     public void asignarAsignaturaProfesor() {
         System.out.print("DNI del profesor: ");
         String dniProfesor = scanner.nextLine();
@@ -56,6 +77,10 @@ public class AdministradorService {
         }
     }
 
+    /**
+     * Matricula a un alumno en una asignatura en el sistema.
+     * El método solicita el DNI del alumno y el ID de la asignatura para realizar la matrícula.
+     */
     public void matricularAlumnoEnAsignatura() {
         System.out.print("DNI del alumno: ");
         String dniAlumno = scanner.nextLine();
@@ -77,6 +102,10 @@ public class AdministradorService {
         }
     }
 
+    /**
+     * Crea una nueva asignatura en el sistema.
+     * El método también permite asignar un profesor a la asignatura.
+     */
     public void crearAsignatura() {
         System.out.print("Nombre de la asignatura: ");
         String nombre = scanner.nextLine();
@@ -105,6 +134,12 @@ public class AdministradorService {
         }
     }
 
+    /**
+     * Elimina una entidad del sistema (Alumno, Profesor, Tutor) basada en la clase proporcionada.
+     *
+     * @param <T> La clase de la entidad que se desea eliminar.
+     * @param entidad La clase de la entidad que se eliminará.
+     */
     public <T> void eliminarEntidad(Class<T> entidad) {
         System.out.println("Introduce el DNI del usuario a eliminar:");
         String dni = scanner.nextLine();
@@ -113,12 +148,27 @@ public class AdministradorService {
         Logger.logInfo("Eliminar entidad: Usuario eliminado correctamente");
     }
 
+    /**
+     * Actualiza los datos de una entidad en el sistema.
+     * El método solicita el DNI del usuario y los nuevos datos para actualizar la entidad.
+     *
+     * @param <T>          La clase de la entidad que se desea actualizar.
+     * @param entidad      La clase de la entidad que se actualizará.
+     * @param dni          El DNI del usuario que se desea actualizar.
+     * @param datosActualizados Los nuevos datos de la entidad.
+     */
     public <T> void actualizarEntidad(Class<T> entidad, String dni, T datosActualizados) {
         UtilsHibernate.actualizarPorDni(entidad, dni, datosActualizados);
         System.out.println("✅ Usuario actualizado correctamente.");
         Logger.logInfo("Actualizar entidad: Usuario actualizado correctamente");
     }
 
+    /**
+     * Elimina un usuario del sistema según su tipo (Alumno, Profesor, Tutor).
+     * El usuario selecciona el tipo de usuario a eliminar.
+     *
+     * @param administradorService Instancia del servicio de administrador para ejecutar la eliminación.
+     */
     public void eliminarUsuario(AdministradorService administradorService) {
         System.out.println("¿Qué tipo de usuario deseas eliminar? (Alumno/Profesor/Tutor)");
         String tipo = scanner.nextLine().toLowerCase();
@@ -143,6 +193,12 @@ public class AdministradorService {
         }
     }
 
+    /**
+     * Actualiza los datos de un usuario según su tipo (Alumno, Profesor, Tutor).
+     * El administrador selecciona el tipo de usuario y luego actualiza sus datos.
+     *
+     * @param administradorService Instancia del servicio de administrador para ejecutar la actualización.
+     */
     public void actualizarUsuario(AdministradorService administradorService) {
         System.out.println("¿Qué tipo de usuario deseas actualizar? (Alumno/Profesor/Tutor)");
         String tipo = scanner.nextLine().toLowerCase();

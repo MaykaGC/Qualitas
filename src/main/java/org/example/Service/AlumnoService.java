@@ -10,14 +10,35 @@ import org.example.Utils.Logger;
 import java.util.Date;
 import java.util.Scanner;
 
+/**
+ * Clase encargada de gestionar las operaciones relacionadas con los alumnos en el sistema.
+ * Esta clase incluye funcionalidades para crear alumnos, ver el horario y las notas de un alumno.
+ */
 public class AlumnoService {
     private static final AlumnoDAO alumnoDAO = new AlumnoDAO();
     private final String usuarioLogeado;
 
+    /**
+     * Constructor de la clase AlumnoService.
+     *
+     * @param usuarioLogeado El DNI del usuario actualmente logueado (alumno).
+     */
     public AlumnoService(String usuarioLogeado) {
         this.usuarioLogeado = usuarioLogeado;
     }
 
+    /**
+     * Crea un nuevo alumno en el sistema.
+     * Este método también crea un usuario alumno asociado y asocia un tutor al alumno.
+     *
+     * @param dni       El DNI del alumno.
+     * @param nombre    El nombre del alumno.
+     * @param correo    El correo electrónico del alumno.
+     * @param contrasena La contraseña del alumno.
+     * @param fecha     La fecha de nacimiento del alumno.
+     * @param direccion La dirección del alumno.
+     * @param telefono  El teléfono del alumno.
+     */
     public void crearAlumno(String dni, String nombre, String correo, String contrasena, Date fecha, String direccion, String telefono) {
         Alumno alumno = new Alumno();
         alumno.setDniAlumno(dni);
@@ -38,7 +59,11 @@ public class AlumnoService {
         }
     }
 
-    public void verAsignaturasAlumno() {
+    /**
+     * Muestra el horario del alumno actualmente logueado.
+     * Se obtienen las asignaturas en las que el alumno está matriculado y se muestran.
+     */
+    public void verHorarioAlumno() {
         Alumno alumno = new Alumno();
         alumno.setDniAlumno(usuarioLogeado);
         alumno = alumnoDAO.obtenerAlumnoPorDni(alumno);
@@ -51,10 +76,14 @@ public class AlumnoService {
             }
         } else {
             System.out.println("⚠️ Alumno no encontrado.");
-            Logger.logWarning("Ver asignaturas del alumno: Alumno no encontrado");
+            Logger.logWarning("Ver horario del alumno: Alumno no encontrado");
         }
     }
 
+    /**
+     * Muestra las notas del alumno actualmente logueado.
+     * Se obtienen las asignaturas en las que el alumno está matriculado y sus respectivas notas.
+     */
     public void verNotasAlumno() {
         Alumno alumno = new Alumno();
         alumno.setDniAlumno(usuarioLogeado);
