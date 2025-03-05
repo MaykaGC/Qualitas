@@ -12,7 +12,7 @@ import java.util.Scanner;
 
 /**
  * Clase encargada de gestionar las operaciones relacionadas con los alumnos en el sistema.
- * Esta clase incluye funcionalidades para crear alumnos, ver el horario y las notas de un alumno.
+ * Esta clase incluye funcionalidades para crear alumnos, ver las asignaturas y las notas de un alumno.
  */
 public class AlumnoService {
     private static final AlumnoDAO alumnoDAO = new AlumnoDAO();
@@ -31,13 +31,13 @@ public class AlumnoService {
      * Crea un nuevo alumno en el sistema.
      * Este método también crea un usuario alumno asociado y asocia un tutor al alumno.
      *
-     * @param dni       El DNI del alumno.
-     * @param nombre    El nombre del alumno.
-     * @param correo    El correo electrónico del alumno.
+     * @param dni        El DNI del alumno.
+     * @param nombre     El nombre del alumno.
+     * @param correo     El correo electrónico del alumno.
      * @param contrasena La contraseña del alumno.
-     * @param fecha     La fecha de nacimiento del alumno.
-     * @param direccion La dirección del alumno.
-     * @param telefono  El teléfono del alumno.
+     * @param fecha      La fecha de nacimiento del alumno.
+     * @param direccion  La dirección del alumno.
+     * @param telefono   El teléfono del alumno.
      */
     public void crearAlumno(String dni, String nombre, String correo, String contrasena, Date fecha, String direccion, String telefono) {
         Alumno alumno = new Alumno();
@@ -60,23 +60,23 @@ public class AlumnoService {
     }
 
     /**
-     * Muestra el horario del alumno actualmente logueado.
+     * Muestra las asignaturas del alumno actualmente logueado o instanciado.
      * Se obtienen las asignaturas en las que el alumno está matriculado y se muestran.
      */
-    public void verHorarioAlumno() {
+    public void verAsignaturasAlumno() {
         Alumno alumno = new Alumno();
         alumno.setDniAlumno(usuarioLogeado);
         alumno = alumnoDAO.obtenerAlumnoPorDni(alumno);
 
         if (alumno != null) {
-            System.out.println("Horario de " + alumno.getNombreAlumno() + ":");
+            System.out.println("Asignaturas de " + alumno.getNombreAlumno() + ":");
             for (Matricula matricula : alumno.getMatriculas()) {
                 Asignatura asignatura = matricula.getAsignatura();
                 System.out.println("Asignatura: " + asignatura.getNombreAsignatura() + " - Curso: " + asignatura.getCurso());
             }
         } else {
             System.out.println("⚠️ Alumno no encontrado.");
-            Logger.logWarning("Ver horario del alumno: Alumno no encontrado");
+            Logger.logWarning("Ver asignaturas del alumno: Alumno no encontrado");
         }
     }
 

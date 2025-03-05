@@ -1,6 +1,6 @@
 package org.example.Service;
 
-import org.example.DAO.*;
+import org.example.DAO.UsuarioDAO;
 import org.example.Entity.Usuario;
 import org.example.Menu.*;
 import org.example.Utils.Logger;
@@ -11,10 +11,18 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Scanner;
 
+/**
+ * Servicio para la gestión de usuarios en el sistema.
+ * Permite iniciar sesión y crear cuentas de usuario con diferentes roles.
+ */
 public class UsuarioService {
     private final Scanner scanner = new Scanner(System.in);
     private static final UsuarioDAO usuarioDAO = new UsuarioDAO();
 
+    /**
+     * Inicia sesión en el sistema verificando las credenciales del usuario.
+     * Dependiendo del rol del usuario, se mostrará el menú correspondiente.
+     */
     public void iniciarSesion() {
         System.out.print("Introduce tu DNI: ");
         String dni = scanner.nextLine();
@@ -25,25 +33,30 @@ public class UsuarioService {
         if (usuario != null) {
             String rolUsuario = usuario.getRol().toString();
             switch (rolUsuario) {
-                case "Alumno" -> {
-                    new MenuAlumno(dni).mostrarMenu();
+                case "Alumno" : {
                     Logger.logInfo("Iniciar sesión: opción alumno seleccionada");
+                    new MenuAlumno(dni).mostrarMenu();
+                    break;
                 }
-                case "Profesor" -> {
-                    new MenuProfesor(dni).mostrarMenu();
+                case "Profesor" : {
                     Logger.logInfo("Iniciar sesión: opción profesor seleccionada");
+                    new MenuProfesor(dni).mostrarMenu();
+                    break;
                 }
-                case "Tutor" -> {
-                    new MenuTutor(dni).mostrarMenu();
+                case "Tutor" : {
                     Logger.logInfo("Iniciar sesión: opción tutor seleccionada");
+                    new MenuTutor(dni).mostrarMenu();
+                    break;
                 }
-                case "Administrador" -> {
-                    new MenuAdministrador().mostrarMenu();
+                case "Administrador" : {
                     Logger.logInfo("Iniciar sesión: opción administrador seleccionada");
+                    new MenuAdministrador().mostrarMenu();
+                    break;
                 }
-                default -> {
-                    System.out.println("⚠️ Rol inválido. Intente nuevamente.");
+                default : {
                     Logger.logWarning("Iniciar sesión: rol inválido");
+                    System.out.println("⚠️ Rol inválido. Intente nuevamente.");
+                    break;
                 }
             }
         } else {
@@ -52,6 +65,12 @@ public class UsuarioService {
         }
     }
 
+    /**
+     * Crea una nueva cuenta de usuario en el sistema.
+     * Dependiendo del código de vinculación, se asigna un rol específico al usuario.
+     *
+     * @throws ParseException Si la fecha de nacimiento ingresada no tiene el formato correcto.
+     */
     public void crearCuenta() throws ParseException {
         System.out.print("Introduce tu DNI: ");
         String dni = scanner.nextLine().trim();
@@ -74,25 +93,30 @@ public class UsuarioService {
 
         char rol = codVinculacion.charAt(0);
         switch (rol) {
-            case '1' -> {
-                new AlumnoService("").crearAlumno(dni, nombre, correoElectronico, contrasenaEncriptada, fecha, direccion, telefono);
+            case '1' : {
                 Logger.logInfo("Crear cuenta: opción alumno seleccionada");
+                new AlumnoService("").crearAlumno(dni, nombre, correoElectronico, contrasenaEncriptada, fecha, direccion, telefono);
+                break;
             }
-            case '2' -> {
-                new ProfesorService("").crearProfesor(dni, nombre, correoElectronico, contrasenaEncriptada, fecha, direccion, telefono);
+            case '2' : {
                 Logger.logInfo("Crear cuenta: opción profesor seleccionada");
+                new ProfesorService("").crearProfesor(dni, nombre, correoElectronico, contrasenaEncriptada, fecha, direccion, telefono);
+                break;
             }
-            case '3' -> {
-                new TutorService().crearTutor(dni, nombre, correoElectronico, contrasenaEncriptada, fecha, direccion, telefono);
+            case '3' : {
                 Logger.logInfo("Crear cuenta: opción tutor seleccionada");
+                new TutorService().crearTutor(dni, nombre, correoElectronico, contrasenaEncriptada, fecha, direccion, telefono);
+                break;
             }
-            case '4' -> {
-                new AdministradorService().crearAdministrador(dni, nombre, correoElectronico, contrasenaEncriptada, fecha, direccion, telefono);
+            case '4' : {
                 Logger.logInfo("Crear cuenta: opción administrador seleccionada");
+                new AdministradorService().crearAdministrador(dni, nombre, correoElectronico, contrasenaEncriptada, fecha, direccion, telefono);
+                break;
             }
-            default -> {
-                System.out.println("⚠️ Rol inválido. Intente nuevamente.");
+            default : {
                 Logger.logWarning("Crear cuenta: rol inválido");
+                System.out.println("⚠️ Rol inválido. Intente nuevamente.");
+                break;
             }
         }
     }

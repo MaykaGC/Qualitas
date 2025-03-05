@@ -174,21 +174,25 @@ public class AdministradorService {
         String tipo = scanner.nextLine().toLowerCase();
 
         switch (tipo) {
-            case "alumno" -> {
-                administradorService.eliminarEntidad(Alumno.class);
+            case "alumno" : {
                 Logger.logInfo("Eliminar usuario: opción alumno seleccionada");
+                administradorService.eliminarEntidad(Alumno.class);
+                break;
             }
-            case "profesor" -> {
-                administradorService.eliminarEntidad(Profesor.class);
+            case "profesor" : {
                 Logger.logInfo("Eliminar usuario: opción profesor seleccionada");
+                administradorService.eliminarEntidad(Profesor.class);
+                break;
             }
-            case "tutor" -> {
-                administradorService.eliminarEntidad(Tutor.class);
+            case "tutor" : {
                 Logger.logInfo("Eliminar usuario: opción tutor seleccionada");
+                administradorService.eliminarEntidad(Tutor.class);
+                break;
             }
-            default -> {
-                System.out.println("⚠️ Tipo de usuario inválido.");
+            default : {
                 Logger.logWarning("Eliminar usuario: Tipo de usuario inválido");
+                System.out.println("⚠️ Tipo de usuario inválido.");
+                break;
             }
         }
     }
@@ -207,33 +211,37 @@ public class AdministradorService {
         String dni = scanner.nextLine();
 
         switch (tipo) {
-            case "alumno" -> {
+            case "alumno" : {
+                Logger.logInfo("Actualizar usuario: opción alumno seleccionada");
                 Alumno alumno = new Alumno();
                 alumno.setDniAlumno(dni);
                 System.out.println("Nuevo nombre: ");
                 alumno.setNombreAlumno(scanner.nextLine());
                 administradorService.actualizarEntidad(Alumno.class, dni, alumno);
-                Logger.logInfo("Actualizar usuario: opción alumno seleccionada");
+                break;
             }
-            case "profesor" -> {
+            case "profesor" : {
+                Logger.logInfo("Actualizar usuario: opción profesor seleccionada");
                 Profesor profesor = new Profesor();
                 profesor.setDniProfesor(dni);
                 System.out.println("Nuevo nombre: ");
                 profesor.setNombreProfesor(scanner.nextLine());
                 administradorService.actualizarEntidad(Profesor.class, dni, profesor);
-                Logger.logInfo("Actualizar usuario: opción profesor seleccionada");
+                break;
             }
-            case "tutor" -> {
+            case "tutor" : {
+                Logger.logInfo("Actualizar usuario: opción tutor seleccionada");
                 Tutor tutor = new Tutor();
                 tutor.setDniTutor(dni);
                 System.out.println("Nuevo nombre: ");
                 tutor.setNombreTutor(scanner.nextLine());
                 administradorService.actualizarEntidad(Tutor.class, dni, tutor);
-                Logger.logInfo("Actualizar usuario: opción tutor seleccionada");
+                break;
             }
-            default -> {
-                System.out.println("⚠️Tipo de usuario inválido.");
+            default : {
                 Logger.logWarning("Actualizar usuario: Tipo de usuario inválido");
+                System.out.println("⚠️Tipo de usuario inválido.");
+                break;
             }
         }
     }

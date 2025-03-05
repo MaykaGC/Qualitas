@@ -5,10 +5,22 @@ import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.cfg.Configuration;
 
+/**
+ * Utilidades para la gestión de sesiones y operaciones con Hibernate.
+ * Esta clase proporciona métodos para crear sesiones, buscar, eliminar y actualizar entidades en la base de datos.
+ * También se encarga de manejar la configuración y el ciclo de vida de las sesiones de Hibernate.
+ */
 public class UtilsHibernate {
 
     private static final SessionFactory sessionFactory = buildSessionFactory();
 
+    /**
+     * Crea una factoría de sesiones de Hibernate utilizando la configuración definida en el archivo "hibernate.cfg.xml".
+     * En caso de error al crear la factoría, se registra un mensaje de error.
+     *
+     * @return La factoría de sesiones de Hibernate.
+     * @throws ExceptionInInitializerError Si ocurre un error durante la inicialización de la factoría.
+     */
     private static SessionFactory buildSessionFactory() {
         try {
             Logger.logInfo("Build session factory: Creando la factoría de sesiones de Hibernate");
@@ -19,6 +31,14 @@ public class UtilsHibernate {
         }
     }
 
+    /**
+     * Elimina una entidad de la base de datos por su identificador (DNI).
+     * Si la entidad no se encuentra, se registra un mensaje de advertencia.
+     *
+     * @param entidad La clase de la entidad que se desea eliminar.
+     * @param dni El identificador (DNI) de la entidad a eliminar.
+     * @param <T> El tipo de la entidad.
+     */
     public static <T> void eliminarPorId(Class<T> entidad, String dni) {
         Transaction transaction = null;
         try (Session session = UtilsHibernate.getSessionFactory().openSession()) {
@@ -42,6 +62,15 @@ public class UtilsHibernate {
         }
     }
 
+    /**
+     * Actualiza los datos de una entidad en la base de datos, identificada por su DNI.
+     * Si la entidad no existe, se registra un mensaje de advertencia.
+     *
+     * @param entidad La clase de la entidad que se desea actualizar.
+     * @param dni El identificador (DNI) de la entidad a actualizar.
+     * @param datosActualizados El objeto con los nuevos datos para actualizar la entidad.
+     * @param <T> El tipo de la entidad.
+     */
     public static <T> void actualizarPorDni(Class<T> entidad, String dni, T datosActualizados) {
         Transaction transaction = null;
         try (Session session = getSessionFactory().openSession()) {
@@ -72,6 +101,14 @@ public class UtilsHibernate {
         }
     }
 
+    /**
+     * Copia los valores de los campos de un objeto fuente a un objeto destino.
+     * Este método se utiliza para actualizar una entidad con nuevos datos.
+     *
+     * @param destino El objeto destino que recibirá los valores.
+     * @param fuente El objeto fuente del que se copiarán los valores.
+     * @param <T> El tipo de la entidad.
+     */
     private static <T> void copiarValores(T destino, T fuente) {
         try {
             for (var campo : destino.getClass().getDeclaredFields()) {
@@ -87,6 +124,14 @@ public class UtilsHibernate {
         }
     }
 
+    /**
+     * Busca una entidad en la base de datos por su identificador (DNI).
+     *
+     * @param entidad La clase de la entidad a buscar.
+     * @param dni El identificador (DNI) de la entidad a buscar.
+     * @param <T> El tipo de la entidad.
+     * @return El objeto de la entidad encontrado, o null si no se encuentra.
+     */
     public static <T> T buscarPorDni(Class<T> entidad, String dni) {
         try (Session session = getSessionFactory().openSession()) {
             return session.find(entidad, dni); // `find()` es recomendado en Hibernate 6
@@ -96,12 +141,20 @@ public class UtilsHibernate {
         }
     }
 
+    /**
+     * Obtiene la factoría de sesiones de Hibernate.
+     *
+     * @return La factoría de sesiones de Hibernate.
+     */
     public static SessionFactory getSessionFactory() {
         Logger.logInfo("Get session factory: Obteniendo la factoría de sesiones de Hibernate");
         return sessionFactory;
     }
 
-    // Cerrar la sesión de Hibernate, se debe llamar al no usar try-with-resources para abrir una sesión
+    /**
+     * Cierra la factoría de sesiones de Hibernate.
+     * Se debe llamar cuando ya no se necesiten más sesiones.
+     */
     public static void shutdown() {
         Logger.logInfo("Shutdown: Cerrando la factoría de sesiones de Hibernate");
         getSessionFactory().close();

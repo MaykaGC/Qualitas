@@ -10,6 +10,10 @@ import org.example.Utils.Logger;
 import java.util.Date;
 import java.util.Scanner;
 
+/**
+ * Servicio para la gestión de profesores en el sistema.
+ * Proporciona métodos para crear profesores, ver sus asignaturas y añadir notas a los alumnos.
+ */
 public class ProfesorService {
     private static final ProfesorDAO profesorDAO = new ProfesorDAO();
     private static final MatriculaDAO matriculaDAO = new MatriculaDAO();
@@ -18,10 +22,26 @@ public class ProfesorService {
     private final String usuarioLogeado;
     private final Scanner scanner = new Scanner(System.in);
 
+    /**
+     * Constructor de ProfesorService.
+     *
+     * @param usuarioLogeado DNI del profesor actualmente autenticado.
+     */
     public ProfesorService(String usuarioLogeado) {
         this.usuarioLogeado = usuarioLogeado;
     }
 
+    /**
+     * Crea un nuevo profesor en el sistema.
+     *
+     * @param dni               DNI del profesor.
+     * @param nombre            Nombre del profesor.
+     * @param correoElectronico Correo electrónico del profesor.
+     * @param contrasena        Contraseña del profesor.
+     * @param miDate            Fecha de nacimiento del profesor.
+     * @param direccion         Dirección del profesor.
+     * @param telefono          Teléfono del profesor.
+     */
     public void crearProfesor(String dni, String nombre, String correoElectronico, String contrasena, Date miDate, String direccion, String telefono) {
         Profesor profesor = new Profesor();
         profesor.setDniProfesor(dni);
@@ -38,13 +58,16 @@ public class ProfesorService {
             if (e.getMessage().contains("Duplicate entry")) {
                 System.out.println("⚠️ El profesor ya existe en la base de datos.");
                 Logger.logWarning("Crear profesor: El profesor ya existe en la base de datos.");
-            } else{
+            } else {
                 System.out.println("❌ No se pudo crear el profesor: " + e.getMessage());
                 Logger.logError("Crear profesor: No se pudo crear el profesor: " + e.getMessage());
             }
         }
     }
 
+    /**
+     * Muestra las asignaturas del profesor autenticado.
+     */
     public void verAsignaturasProfesor() {
         Profesor profesor = new Profesor();
         profesor.setDniProfesor(usuarioLogeado);
@@ -65,6 +88,9 @@ public class ProfesorService {
         }
     }
 
+    /**
+     * Permite al profesor añadir una nota a un alumno en una asignatura específica.
+     */
     public void añadirNota() {
         System.out.print("Introduce el DNI del alumno: ");
         String dni = scanner.nextLine();
