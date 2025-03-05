@@ -2,16 +2,23 @@
 <!DOCTYPE hibernate-configuration PUBLIC
         "-//Hibernate/Hibernate Configuration DTD 3.0//EN"
         "http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
-
 <hibernate-configuration xmlns="http://www.hibernate.org/xsd/orm/cfg">
     <session-factory>
         <property name="hibernate.connection.driver_class">com.mysql.cj.jdbc.Driver</property>
         <property name="hibernate.connection.url">jdbc:mysql://localhost:3306/qualitas</property>
+
         <property name="hibernate.connection.username">root</property>
         <property name="hibernate.connection.password">123456</property>
-<!--        <property name="hibernate.show_sql">true</property>-->
-        <property name="hibernate.format_sql">true</property>
-<!--        <property name="hibernate.hbm2ddl.auto">update</property>-->
+
+        <!-- Muestra en las consola las sentencias SQL generadas-->
+        <!--         <property name="hibernate.show_sql">true</property> -->
+
+        <!-- Formatea el SQL generado por Hibernate y hace que sean más legibles -->
+        <!--        <property name="hibernate.format_sql">true</property>-->
+
+        <!-- Actualiza automáticamente el esquema de la base de datos -->
+        <!--         <property name="hibernate.hbm2ddl.auto">update</property> -->
+        <!-- Si se descomentara, Hibernate actualizaría el esquema de la base de datos para que coincida con las entidades de Java -->
 
         <mapping class="org.example.Entity.Usuario"/>
         <mapping class="org.example.Entity.Alumno"/>
